@@ -43,11 +43,11 @@ const Foodstock = Game({
       actionBoards: [
         _.cloneDeep([
           boards[0],
-          boards[1],
           boards[2],
-          boards[3],
           boards[4],
-          boards[5],
+          boards[6],
+          boards[8],
+          boards[10],
         ]),
       ],
     };
