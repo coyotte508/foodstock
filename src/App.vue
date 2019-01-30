@@ -2,7 +2,7 @@
   <div id="app" class="foodstock">
     <v-btn v-if="!client" @click="createGame" class="mb-4">Create game</v-btn>
     <div v-if="client">
-      <Board />
+      <Board :G=state.G />
 
       <v-btn @click="placeHelper">Place Helper</v-btn>
       <v-btn @click="levelUp">Level Up</v-btn>

@@ -1,21 +1,22 @@
 <template>
   <v-layout row>
-    <vflex xs6>
-      <ActionBoard :id="0" />
-      <ActionBoard :id="4" />
-      <ActionBoard :id="8" />
-    </vflex>
-    <vflex xs6>
-      <ActionBoard :id="2" />
-      <ActionBoard :id="6" />
-      <ActionBoard :id="10" />
-    </vflex>
+    <v-flex xs6>
+      <ActionBoard :id="+G.actionBoards[0].id" />
+      <ActionBoard :id="+G.actionBoards[2].id" />
+      <ActionBoard :id="+G.actionBoards[4].id" />
+    </v-flex>
+    <v-flex xs6>
+      <ActionBoard :id="+G.actionBoards[1].id" />
+      <ActionBoard :id="+G.actionBoards[3].id" />
+      <ActionBoard :id="+G.actionBoards[5].id" />
+    </v-flex>
   </v-layout>
 </template>
 
 <script lang="ts">
-import {Vue, Component} from 'vue-property-decorator';
+import {Vue, Component, Prop} from 'vue-property-decorator';
 import ActionBoard from './ActionBoard.vue';
+import { GameState } from '@/engine';
 
 @Component({
   components: {
@@ -23,6 +24,7 @@ import ActionBoard from './ActionBoard.vue';
   }
 })
 export default class Board extends Vue {
-
+  @Prop()
+  G: GameState;
 }
 </script>

@@ -1,13 +1,13 @@
 import { Action } from './action';
 
-interface Board {
+export interface ActionBoard {
   id: number;
   gainCustomer?: Array<'red' | 'black' | 'any' | 'none'>;
   actions: Action[];
 }
 
 
-const boards: Board[] = [
+const boards: ActionBoard[] = [
   // Board 1-1
   { id: 0,
     gainCustomer : ['red'],

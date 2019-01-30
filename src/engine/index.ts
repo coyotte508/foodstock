@@ -3,20 +3,20 @@ import { Player, createPlayer } from './player';
 import * as _ from 'lodash';
 import { numberOfCustomers, numberOfSpecialCustomers } from './customer';
 import Context from './context';
-import boards from './action-boards';
+import boards, { ActionBoard } from './action-boards';
 
 interface SetupData {
 
 }
 
-interface GameState {
+export interface GameState {
   secret: null;
 
   players: {
     [key: string]: Player,
   };
 
-  actionBoards: any [];
+  actionBoards: ActionBoard [];
 
   nPlayers: number;
   round: number;
@@ -40,7 +40,7 @@ const Foodstock = Game({
       round: 1,
       lastRound: ctx.numPlayers <= 3 ? 3 : 4,
 
-      actionBoards: [
+      actionBoards:
         _.cloneDeep([
           boards[0],
           boards[2],
@@ -49,7 +49,6 @@ const Foodstock = Game({
           boards[8],
           boards[10],
         ]),
-      ],
     };
 
     for (let i = 0; i < ctx.numPlayers; i++) {
