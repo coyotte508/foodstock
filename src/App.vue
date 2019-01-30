@@ -1,6 +1,18 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
+    <button v-if="!client" @click="createGame">Create game</button>
+    <div v-if="client">
+      <p>Players: {{state.ctx.numPlayers}}</p>
+      <p>Current player: {{state.ctx.currentPlayer}}</p>
+      <p>Round: {{state.G.round}}</p>
+      <p>Turn: {{state.ctx.turn}}</p>
+
+      <button @click="placeHelper">Place Helper</button>
+      <button @click="levelUp">Level Up</button>
+
+      <pre style="text-align: left">players: {{JSON.stringify(state.G.players, null, 2)}}</pre>
+      <pre style="text-align: left">ctx: {{JSON.stringify(state.ctx, null, 2)}}</pre>
+    </div>
   </div>
 </template>
 
@@ -9,13 +21,30 @@ import { Component, Vue } from 'vue-property-decorator';
 import { Client } from 'boardgame.io/client';
 import Engine from './engine';
 
-@Component
+@Component({
+})
 export default class App extends Vue {
+  client: any = null;
+
+  get state() {
+    return this.client.getState();
+  }
+
   createGame() {
-    const gameInstance = new Client({
+    this.client = new Client({
       game: Engine,
       numPlayers: 2,
     });
+
+    // console.log(JSON.stringify(this.client.getState()));
+  }
+
+  placeHelper() {
+
+  }
+
+  levelUp() {
+    this.client.moves.levelUp();
   }
 }
 </script>

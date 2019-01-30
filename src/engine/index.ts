@@ -63,7 +63,8 @@ const Foodstock = Game({
    },
   moves: {
     // When moving to the next board
-    levelUp: (G: GameState, ctx: Context, payload: any) => {
+    levelUp(G: GameState, ctx: Context, payload: any) {
+      console.log("level up");
       const pl = G.players[ctx.currentPlayer];
 
       if (pl.level >= 6) {
@@ -71,13 +72,11 @@ const Foodstock = Game({
       }
 
       pl.level += 1;
-      ctx.events.endTurn();
       return G;
     },
 
     // When placing a helper
-    placeHelper: (G: GameState, ctx: Context, payload: any) => {
-      ctx.events.endTurn();
+    placeHelper(G: GameState, ctx: Context, payload: any) {
       return G;
     },
   },
@@ -89,6 +88,7 @@ const Foodstock = Game({
     },
 
     onTurnEnd: (G: GameState, ctx: Context) => {
+      console.log("onTurnEnd");
       const shouldEndRound = false;
       if (shouldEndRound) {
         G.round += 1;
