@@ -7,10 +7,6 @@ interface SetupData {
 
 }
 
-function Shuffle<T>() {
-
-}
-
 interface Context {
   numPlayers: number;
   random: {
