@@ -1,7 +1,7 @@
 import { Action } from './action';
 
 export interface ActionBoard {
-  id: number;
+  id: string;
   gainCustomer?: Array<'red' | 'black' | 'any' | 'none'>;
   actions: Action[][];
 }
@@ -9,7 +9,7 @@ export interface ActionBoard {
 
 const boards: ActionBoard[] = [
   // Board 1-1
-  { id: 0,
+  { id: "1-1",
     gainCustomer : ['red'],
     actions: [
       [
@@ -36,7 +36,7 @@ const boards: ActionBoard[] = [
     ],
   },
   // Board 1-2
-  { id: 1,
+  { id: "1-2",
     gainCustomer : ['red'],
     actions: [
       [
@@ -61,25 +61,25 @@ const boards: ActionBoard[] = [
       [{cost: 2, unlimitedHelpers: true, ingredients: ['beige', 'beige', 'beige']}]
   ]},
   // Board 2-1
-  { id: 2, actions: []},
+  { id: "2-1", actions: []},
   // Board 2-2
-  { id: 3, actions: []},
+  { id: "2-2", actions: []},
   // Board 3-1
-  { id: 4, actions: []},
+  { id: "3-1", actions: []},
   // Board 3-3
-  { id: 5, actions: []},
+  { id: "3-2", actions: []},
   // Board 4-1
-  { id: 6, actions: []},
+  { id: "4-1", actions: []},
   // Board 4-2
-  { id: 7, actions: []},
+  { id: "4-2", actions: []},
   // Board 5-1
-  { id: 8, actions: []},
+  { id: "5-1", actions: []},
   // Board 5-2
-  { id: 9, actions: []},
+  { id: "5-2", actions: []},
   // Board 6-1
-  { id: 10, actions: []},
+  { id: "6-1", actions: []},
   // Board 6-2
-  { id: 11, actions: []},
+  { id: "6-2", actions: []},
 ];
 
 // CLean up actions

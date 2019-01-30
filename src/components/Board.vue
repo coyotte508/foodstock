@@ -2,14 +2,14 @@
   <v-layout row>
     <SvgBase />
     <v-flex xs6>
-      <ActionBoard :id="+G.actionBoards[0].id" />
-      <ActionBoard :id="+G.actionBoards[2].id" />
-      <ActionBoard :id="+G.actionBoards[4].id" />
+      <ActionBoard :id="G.actionBoards[0].id" />
+      <ActionBoard :id="G.actionBoards[2].id" />
+      <ActionBoard :id="G.actionBoards[4].id" />
     </v-flex>
     <v-flex xs6>
-      <ActionBoard :id="+G.actionBoards[1].id" />
-      <ActionBoard :id="+G.actionBoards[3].id" />
-      <ActionBoard :id="+G.actionBoards[5].id" />
+      <ActionBoard :id="G.actionBoards[1].id" />
+      <ActionBoard :id="G.actionBoards[3].id" />
+      <ActionBoard :id="G.actionBoards[5].id" />
     </v-flex>
   </v-layout>
 </template>
