@@ -2,7 +2,7 @@
   <div id="app" class="foodstock">
     <v-btn v-if="!client" @click="createGame" class="mb-4">Create game</v-btn>
     <div v-if="client">
-      <Board :G=state.G />
+      <Board />
 
       <v-btn @click="placeHelper">Place Helper</v-btn>
       <v-btn @click="levelUp">Level Up</v-btn>
@@ -25,12 +25,21 @@ import Board from '@/components/Board.vue';
 @Component({
   components: {
     Board
+  },
+  watch: {
+    /** Update global state when the game state changes */
+    state(newVal) {
+      this.$store.commit("foodstock/stateChanged", newVal);
+    }
   }
 })
 export default class App extends Vue {
   client: any = null;
 
   get state() {
+    if (!this.client) {
+      return null;
+    }
     return this.client.getState();
   }
 

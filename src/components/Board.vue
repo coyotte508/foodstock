@@ -24,7 +24,8 @@ import { GameState } from '@/engine';
   }
 })
 export default class Board extends Vue {
-  @Prop()
-  G: GameState;
+  get G(): GameState {
+    return this.$store.state.foodstock.game;
+  }
 }
 </script>
