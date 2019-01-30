@@ -53,7 +53,7 @@ const Foodstock = Game({
     };
 
     for (let i = 0; i < ctx.numPlayers; i++) {
-      G.players[i] = createPlayer(ctx);
+      G.players[i] = createPlayer(ctx, '' + i);
     }
 
     ctx.random.Shuffle(G.customers);
@@ -72,6 +72,8 @@ const Foodstock = Game({
       }
 
       pl.level += 1;
+
+      ctx.events.endTurn();
       return G;
     },
 
@@ -84,22 +86,30 @@ const Foodstock = Game({
   flow: {
     // End condition of the game
     endGameIf: (G: GameState, ctx: Context) => {
-      return G.round > G.lastRound;
+      if (G.round > G.lastRound) {
+        const players = _.values(G.players);
+
+        return {
+          winner: _.maxBy(_.values(G.players), 'money').id,
+        };
+      }
     },
 
     onTurnEnd: (G: GameState, ctx: Context) => {
-      console.log("onTurnEnd");
+      console.log("onTurnEnd", ctx.currentPlayer);
       const shouldEndRound = false;
       if (shouldEndRound) {
         G.round += 1;
 
         if (G.round > G.lastRound) {
-          return;
+          return G;
         }
 
         // At the end of a round, reset board level
         _.forEach(G.players, Player.beginRound);
       }
+
+      return G;
     },
   },
 

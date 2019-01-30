@@ -40,7 +40,7 @@ export default class App extends Vue {
   }
 
   placeHelper() {
-
+    this.client.moves.placeHelper();
   }
 
   levelUp() {

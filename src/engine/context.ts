@@ -5,7 +5,7 @@ export default interface Context {
     D2: () => 1 | 0,
   };
   events: {
-    endTurn: () => void,
+    endTurn: (nextPlayer?: string) => void,
     endPhase: () => void,
   };
   currentPlayer: string;
