@@ -2,24 +2,10 @@ import {Game, INVALID_MOVE} from 'boardgame.io/core';
 import { Player, createPlayer } from './player';
 import * as _ from 'lodash';
 import { numberOfCustomers, numberOfSpecialCustomers } from './customer';
+import Context from './context';
 
 interface SetupData {
 
-}
-
-interface Context {
-  numPlayers: number;
-  random: {
-    Shuffle: <T>(deck: T[]) => T[],
-  };
-  events: {
-    endTurn: () => void,
-    endPhase: () => void,
-  };
-  currentPlayer: string;
-  /** Player that just moved */
-  playerID: string;
-  turn: number;
 }
 
 interface GameState {
@@ -51,7 +37,7 @@ const Foodstock = Game({
     };
 
     for (let i = 0; i < ctx.numPlayers; i++) {
-      G.players[i] = createPlayer();
+      G.players[i] = createPlayer(ctx);
     }
 
     ctx.random.Shuffle(G.customers);
