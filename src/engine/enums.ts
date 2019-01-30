@@ -1,4 +1,1 @@
-export enum IngredientType {
-  Tomato = 'tomato',
-  // todo: other ingredients
-}
+export type Ingredient = 'white' | 'beige' | 'red' | 'brown' | 'pink' | 'yellow' | 'green' | 'grey';

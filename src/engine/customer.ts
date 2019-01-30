@@ -1,8 +1,8 @@
-import { IngredientType } from './enums';
+import { Ingredient } from './enums';
 
 interface Customer {
   ingredients: Array<{
-    type: IngredientType,
+    type: Ingredient,
   }>;
 
   // Money gained when fulfilling order
