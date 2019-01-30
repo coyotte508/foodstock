@@ -1,8 +1,21 @@
 import {Game} from 'boardgame.io/core';
-import Player from './player';
+import { Player, createPlayer } from './player';
+import * as _ from 'lodash';
+import { numberOfCustomers, numberOfSpecialCustomers } from './customer';
 
 interface SetupData {
-  nbPlayers: number;
+
+}
+
+function Shuffle<T>() {
+
+}
+
+interface Context {
+  numPlayers: number;
+  random: {
+    Shuffle: <T>(deck: T[]) => T[],
+  };
 }
 
 interface GameState {
@@ -11,23 +24,32 @@ interface GameState {
   players: {
     [key: number]: Player,
   };
+
+  customers: number[];
+  specialCustomers: number[];
 }
 
 const Foodstock = Game({
   name: 'Foodstock',
-  setup: (ctx, setupData: SetupData) => ({
-    // Secret key only known to server
-    secret: null,
+  setup: (ctx: Context, setupData: SetupData) => {
+    const G: GameState = {
+      players: {},
+      // Secret key only known to server
+      secret: null,
 
-    players: () => {
-      const players = {};
+      customers: _.range(0, numberOfCustomers),
+      specialCustomers: _.range(0, numberOfSpecialCustomers),
+    };
 
-      for (let i = 0; i < setupData.nbPlayers; i++) {
-        players[i] = new Player();
-      }
-      return players;
-    },
-  }),
+    for (let i = 0; i < ctx.numPlayers; i++) {
+      G.players[i] = createPlayer();
+    }
+
+    ctx.random.Shuffle(G.customers);
+    ctx.random.Shuffle(G.specialCustomers);
+
+    return G;
+   },
   moves: {
     // Todo: action that changes the state of the game, and returns NEW state
     action1: (G) => G,
