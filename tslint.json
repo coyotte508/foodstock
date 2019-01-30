@@ -16,6 +16,8 @@
     "object-literal-sort-keys": false,
     "no-consecutive-blank-lines": false,
     "member-access": false,
-    "no-namespace": false
+    "no-namespace": false,
+    "no-empty": false,
+    "no-empty-interface": false
   }
 }

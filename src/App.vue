@@ -7,20 +7,15 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import { Client } from 'boardgame.io/client';
-import HelloWorld from './components/HelloWorld.vue';
 import Engine from './engine';
 
-@Component({
-  components: {
-    HelloWorld,
-  },
-})
+@Component
 export default class App extends Vue {
   createGame() {
     const gameInstance = new Client({
       game: Engine,
-      numPlayers: 2
-    })
+      numPlayers: 2,
+    });
   }
 }
 </script>
