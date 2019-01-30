@@ -1,8 +1,10 @@
 <template>
   <svg viewBox="0 0 58 19" class="action-board">
-    <image xlink:href="../assets/board1.png" height="100" width="60" :y=offset>
-      <desc>board</desc>
-    </image>
+    <defs>
+      <image xlink:href="../assets/board1.png" height="100" width="60" id="board1" />
+      <image xlink:href="../assets/board2.png" height="100" width="60" id="board2" />
+    </defs>
+    <use :href="'#' + board" :y=offset />
   </svg>
 </template>
 
@@ -14,12 +16,17 @@ export default class ActionBoard extends Vue {
   @Prop({default: 1})
   id: number;
 
-  get fileName() {
-    return "board1.png";
+  get board() {
+    return this.number <= 3 ? "board1" : "board2";
+  }
+
+  // returns 1-6
+  get number() {
+    return Math.floor(this.id / 2) + 1;
   }
 
   get offset() {
-    return -10 + -((this.id - 1) % 3) * 23;
+    return -10 + - (2 - ((this.number - 1) % 3)) * 23;
   }
 }
 </script>
