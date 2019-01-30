@@ -1,14 +1,14 @@
 <template>
-  <div id="app">
-    <button v-if="!client" @click="createGame">Create game</button>
+  <div id="app" class="foodstock">
+    <v-btn v-if="!client" @click="createGame" class="mb-4">Create game</v-btn>
     <div v-if="client">
-      <p>Players: {{state.ctx.numPlayers}}</p>
+      <Board />
+
+      <v-btn @click="placeHelper">Place Helper</v-btn>
+      <v-btn @click="levelUp">Level Up</v-btn>
+
       <p>Current player: {{state.ctx.currentPlayer}}</p>
       <p>Round: {{state.G.round}}</p>
-      <p>Turn: {{state.ctx.turn}}</p>
-
-      <button @click="placeHelper">Place Helper</button>
-      <button @click="levelUp">Level Up</button>
 
       <pre style="text-align: left">players: {{JSON.stringify(state.G.players, null, 2)}}</pre>
       <pre style="text-align: left">ctx: {{JSON.stringify(state.ctx, null, 2)}}</pre>
@@ -20,8 +20,12 @@
 import { Component, Vue } from 'vue-property-decorator';
 import { Client } from 'boardgame.io/client';
 import Engine from './engine';
+import Board from '@/components/Board.vue';
 
 @Component({
+  components: {
+    Board
+  }
 })
 export default class App extends Vue {
   client: any = null;
@@ -56,6 +60,6 @@ export default class App extends Vue {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  margin-top: 40px;
 }
 </style>
