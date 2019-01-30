@@ -21,6 +21,8 @@ interface GameState {
     [key: number]: Player,
   };
 
+  nPlayers: number;
+
   customers: number[];
   specialCustomers: number[];
 }
@@ -30,6 +32,7 @@ const Foodstock = Game({
   setup: (ctx: Context, setupData: SetupData) => {
     const G: GameState = {
       players: {},
+      nPlayers: ctx.numPlayers,
       // Secret key only known to server
       secret: null,
 
@@ -47,12 +50,12 @@ const Foodstock = Game({
     return G;
    },
   moves: {
-    // Todo: action that changes the state of the game, and returns NEW state
-    action1: (G) => G,
-    // State viewable by specific player (hide cards)
-    // playerView: (G, ctx, playerId) => ({}),
+    // Todo: action that changes the state of the game, and returns modified state
+    action1: (G: GameState) => G,
   },
 
+  // State viewable by specific player (hide cards)
+  // playerView: (G, ctx, playerId) => ({}),
 });
 
 
