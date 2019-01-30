@@ -1,4 +1,4 @@
-import { Ingredient } from './enums';
+import { Ingredient, SpecialAction } from './enums';
 
 export interface Action {
   /** List of ingredients that can be gained by the action */
@@ -9,4 +9,11 @@ export interface Action {
   helpers?: string[];
   /** Customer */
   customers?: Array<'red' | 'black' | 'any'>;
+  /** cost for action */
+  cost?: number;
+  /** keep helper at the end of the round */
+  keepHelpers?: boolean;
+  /** special action */
+  specialActions?: SpecialAction[];
+
 }

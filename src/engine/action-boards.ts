@@ -3,7 +3,7 @@ import { Action } from './action';
 interface Board {
   id: number;
   gainCustomer?: Array<'red' | 'black' | 'any' | 'none'>;
-  actions?: Action[];
+  actions: Action[];
 }
 
 
@@ -22,8 +22,8 @@ const boards: Board[] = [
       {ingredients: ['beige'], customers: ['red']},
       {ingredients: ['beige'], customers: ['black']},
       {ingredients: ['brown'], customers: ['any']},
-      {},
-      {ingredients: ['brown', 'beige'], maxHelpers: 4},
+      {cost: 1, customers: ['black']},
+      {ingredients: ['brown', 'beige'], maxHelpers: 4, cost: 2},
       ],
     },
     { id: 1,
@@ -41,23 +41,25 @@ const boards: Board[] = [
       {customers: ['black']},
       {customers: ['black', 'black']},
 
-      {},
-      {maxHelpers: 4, ingredients: ['beige', 'beige', 'beige']},
+      {cost: 2, keepHelpers: true, specialActions: ['improvementCard'] },
+      {cost: 2, maxHelpers: 4, ingredients: ['beige', 'beige', 'beige']},
     ]},
-    { id: 2},
-    { id: 3},
-    { id: 4},
-    { id: 5},
+    { id: 2, actions: []},
+    { id: 3, actions: []},
+    { id: 4, actions: []},
+    { id: 5, actions: []},
 ];
 
 // CLean up actions
 for (const board of boards) {
-  for (const action of board) {
+  for (const action of board.actions) {
       action.helpers = [];
       action.maxHelpers = action.maxHelpers || 1;
       action.customers = action.customers || [];
       action.ingredients = action.ingredients || [];
-    }
+      action.cost = action.cost || 0;
+      action.keepHelpers = action.keepHelpers || false;
+      action.specialActions = action.specialActions || [];
   }
 }
 
