@@ -1,8 +1,9 @@
 import {Game, INVALID_MOVE} from 'boardgame.io/core';
-import { Player, createPlayer, resetPlayerForTurn } from './player';
+import { Player, createPlayer } from './player';
 import * as _ from 'lodash';
 import { numberOfCustomers, numberOfSpecialCustomers } from './customer';
 import Context from './context';
+import boards from './action-boards';
 
 interface SetupData {
 
@@ -14,6 +15,8 @@ interface GameState {
   players: {
     [key: string]: Player,
   };
+
+  actionBoards: any [];
 
   nPlayers: number;
   round: number;
@@ -36,6 +39,17 @@ const Foodstock = Game({
       specialCustomers: _.range(0, numberOfSpecialCustomers),
       round: 1,
       lastRound: ctx.numPlayers <= 3 ? 3 : 4,
+
+      actionBoards: [
+        _.cloneDeep([
+          boards[0][ctx.random.D2()],
+          boards[1][ctx.random.D2()],
+          boards[2][ctx.random.D2()],
+          boards[3][ctx.random.D2()],
+          boards[4][ctx.random.D2()],
+          boards[5][ctx.random.D2()],
+        ]),
+      ],
     };
 
     for (let i = 0; i < ctx.numPlayers; i++) {
