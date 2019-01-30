@@ -1,9 +1,5 @@
 <template>
   <svg viewBox="0 0 58 19" class="action-board">
-    <defs>
-      <image xlink:href="../assets/board1.png" height="100" width="60" id="board1" />
-      <image xlink:href="../assets/board2.png" height="100" width="60" id="board2" />
-    </defs>
     <use :href="'#' + board" :y=offset />
   </svg>
 </template>

@@ -1,5 +1,6 @@
 <template>
   <v-layout row>
+    <SvgBase />
     <v-flex xs6>
       <ActionBoard :id="+G.actionBoards[0].id" />
       <ActionBoard :id="+G.actionBoards[2].id" />
@@ -16,11 +17,13 @@
 <script lang="ts">
 import {Vue, Component, Prop} from 'vue-property-decorator';
 import ActionBoard from './ActionBoard.vue';
+import SvgBase from './SvgBase.vue';
 import { GameState } from '@/engine';
 
 @Component({
   components: {
-    ActionBoard
+    ActionBoard,
+    SvgBase
   }
 })
 export default class Board extends Vue {

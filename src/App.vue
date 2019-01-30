@@ -4,6 +4,15 @@
     <div v-if="client">
       <Board />
 
+      <v-layout row wrap>
+        <v-flex xs6>
+          <PlayerBoard id="0" />
+        </v-flex>
+        <v-flex xs6>
+          <PlayerBoard id="1" />
+        </v-flex>
+      </v-layout>
+
       <v-btn @click="placeHelper">Place Helper</v-btn>
       <v-btn @click="levelUp">Level Up</v-btn>
 
@@ -21,10 +30,12 @@ import { Component, Vue } from 'vue-property-decorator';
 import { Client } from 'boardgame.io/client';
 import Engine from './engine';
 import Board from '@/components/Board.vue';
+import PlayerBoard from '@/components/PlayerBoard.vue';
 
 @Component({
   components: {
-    Board
+    Board,
+    PlayerBoard
   },
   watch: {
     /** Update global state when the game state changes */

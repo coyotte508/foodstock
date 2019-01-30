@@ -1,0 +1,40 @@
+<template>
+  <div class="player-info ma-2" :style="`border: solid 1px ${color}`">
+    <h3>Player {{+id + 1}}</h3>
+    <svg viewBox="0 0 113 80" class="player-board mt-1">
+      <use href="#player-board" :x=0 :y=0 />
+      <Helper :transform="`translate(${3.4+4.56*h},77)`" v-for="h in helpers" :key="'helper-' + h" :id=id />
+    </svg>
+  </div>
+</template>
+
+<script lang="ts">
+import Helper from './Helper.vue';
+import {Vue, Component, Prop} from "vue-property-decorator";
+import { Player } from '@/engine/player';
+import _ from "lodash";
+import { playerColor } from '@/graphics/player-color';
+
+@Component({
+  components: {
+    Helper
+  }
+})
+export default class PlayerBoard extends Vue {
+  @Prop()
+  id: string;
+
+  get player(): Player {
+    return this.$store.state.foodstock.game.players[this.id];
+  }
+
+  get helpers(): number[] {
+    return _.range(0, this.player.helpers);
+  }
+
+  get color() {
+    return playerColor(this.id);
+  }
+}
+
+</script>
