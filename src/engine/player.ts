@@ -23,3 +23,10 @@ export function createPlayer(ctx: Context) {
     ]),
   };
 }
+
+
+export namespace Player {
+  export function beginRound(pl: Player) {
+    pl.level = 1;
+  }
+}

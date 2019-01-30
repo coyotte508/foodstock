@@ -1,5 +1,5 @@
 import {Game, INVALID_MOVE} from 'boardgame.io/core';
-import { Player, createPlayer } from './player';
+import { Player, createPlayer, resetPlayerForTurn } from './player';
 import * as _ from 'lodash';
 import { numberOfCustomers, numberOfSpecialCustomers } from './customer';
 import Context from './context';
@@ -17,6 +17,7 @@ interface GameState {
 
   nPlayers: number;
   round: number;
+  lastRound: number;
 
   customers: number[];
   specialCustomers: number[];
@@ -34,6 +35,7 @@ const Foodstock = Game({
       customers: _.range(0, numberOfCustomers),
       specialCustomers: _.range(0, numberOfSpecialCustomers),
       round: 1,
+      lastRound: ctx.numPlayers <= 3 ? 3 : 4,
     };
 
     for (let i = 0; i < ctx.numPlayers; i++) {
@@ -69,7 +71,21 @@ const Foodstock = Game({
   flow: {
     // End condition of the game
     endGameIf: (G: GameState, ctx: Context) => {
-      return (G.nPlayers < 4 && G.round >= 4) || G.round >= 5;
+      return G.round > G.lastRound;
+    },
+
+    onTurnEnd: (G: GameState, ctx: Context) => {
+      const shouldEndRound = false;
+      if (shouldEndRound) {
+        G.round += 1;
+
+        if (G.round > G.lastRound) {
+          return;
+        }
+
+        // At the end of a round, reset board level
+        _.forEach(G.players, Player.beginRound);
+      }
     },
   },
 
