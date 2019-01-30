@@ -1,12 +1,16 @@
 import { Action } from './action';
 
-type Board = Action[];
+interface Board {
+  id: number;
+  gainCustomer?: Array<'red' | 'black' | 'any' | 'none'>;
+  actions?: Action[];
+}
 
 
-const boards: Array<[Board, Board]> = [
-  // Boards with 1 dice
-  [
-    [
+const boards: Board[] = [
+    { id: 0,
+      gainCustomer : ['red'],
+      actions: [
       {ingredients: ['beige']},
       {ingredients: ['beige', 'beige']},
       {ingredients: ['beige', 'beige', 'beige']},
@@ -20,7 +24,11 @@ const boards: Array<[Board, Board]> = [
       {ingredients: ['brown'], customers: ['any']},
       {},
       {ingredients: ['brown', 'beige'], maxHelpers: 4},
-    ], [
+      ],
+    },
+    { id: 1,
+      gainCustomer : ['red'],
+      actions: [
       {ingredients: ['beige']},
       {ingredients: ['brown', 'brown']},
       {ingredients: ['beige', 'beige']},
@@ -35,24 +43,16 @@ const boards: Array<[Board, Board]> = [
 
       {},
       {maxHelpers: 4, ingredients: ['beige', 'beige', 'beige']},
-    ],
-  ],
-  // Boards with 2 dice
-  [[], []],
-  // Boards with 3 dice
-  [[], []],
-  // Boards with 4 dice
-  [[], []],
-  // Boards with 5 dice
-  [[], []],
-  // Boards with 6 dice
-  [[], []],
+    ]},
+    { id: 2},
+    { id: 3},
+    { id: 4},
+    { id: 5},
 ];
 
 // CLean up actions
-for (const boardGroup of boards) {
-  for (const board of boardGroup) {
-    for (const action of board) {
+for (const board of boards) {
+  for (const action of board) {
       action.helpers = [];
       action.maxHelpers = action.maxHelpers || 1;
       action.customers = action.customers || [];

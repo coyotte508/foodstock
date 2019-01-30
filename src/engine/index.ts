@@ -42,12 +42,12 @@ const Foodstock = Game({
 
       actionBoards: [
         _.cloneDeep([
-          boards[0][ctx.random.D2()],
-          boards[1][ctx.random.D2()],
-          boards[2][ctx.random.D2()],
-          boards[3][ctx.random.D2()],
-          boards[4][ctx.random.D2()],
-          boards[5][ctx.random.D2()],
+          boards[0],
+          boards[1],
+          boards[2],
+          boards[3],
+          boards[4],
+          boards[5],
         ]),
       ],
     };
