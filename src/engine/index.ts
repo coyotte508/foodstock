@@ -35,8 +35,8 @@ const Foodstock = Game({
       // Secret key only known to server
       secret: null,
 
-      customers: _.range(0, NormalCustomerDeck.length - 1),
-      specialCustomers: _.range(0, SpecialCustomerDeck.length - 1),
+      customers: [...NormalCustomerDeck],
+      specialCustomers: [...SpecialCustomerDeck],
       round: 1,
       lastRound: ctx.numPlayers <= 3 ? 3 : 4,
 

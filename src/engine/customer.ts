@@ -3,10 +3,10 @@ import { Ingredient, FoodType, CustomerType} from './enums';
 interface Customer {
   foodName: string;
   foodType: FoodType;
-  customerName: string;
+  name: string;
   customerType: CustomerType;
-  veggie: boolean;
-  blogger: boolean;
+  veggie?: boolean;
+  blogger?: boolean;
   ingredients: Array<{
     type: Ingredient,
   }>;
@@ -22,8 +22,6 @@ export const CustomerCards = [
     type: FoodType.Taco,
     customerName: 'Doner',
     customerType: CustomerType.Normal,
-    veggie: false,
-    blogger: false,
     ingredients: ['beige','brown','green','white'],
     moneyGained: 3,
   },
