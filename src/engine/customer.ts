@@ -22,7 +22,8 @@ export const CustomerCards = [
     type: FoodType.Taco,
     customerName: 'Doner',
     customerType: CustomerType.Normal,
-    ingredients: ['beige','brown','green','white'],
+    ingredients: ['beige', 'brown', 'green', 'white'],
+
     moneyGained: 3,
   },
   {
@@ -32,7 +33,7 @@ export const CustomerCards = [
 ];
 
 
-export const NormalCustomerDeck = [0,0,0,0,0,1,1];
-export const SpecialCustomerDeck = [2,2,2,2,2,2];
+export const NormalCustomerDeck = [0, 0, 0, 0, 0, 1, 1];
+export const SpecialCustomerDeck = [2, 2, 2, 2, 2, 2];
 
 

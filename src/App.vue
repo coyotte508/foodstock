@@ -42,11 +42,14 @@ import PlayerBoard from '@/components/PlayerBoard.vue';
     state(newVal) {
       this.$store.commit("foodstock/stateChanged", newVal);
     }
+  },
+  created(this: App) {
+    this.createGame();
   }
 })
 export default class App extends Vue {
   client: any = null;
-
+  launched = false;
   get state() {
     if (!this.client) {
       return null;
@@ -59,6 +62,8 @@ export default class App extends Vue {
       game: Engine,
       numPlayers: 2,
     });
+
+    this.$store.commit("foodstock/stateChanged", this.state);
 
     // console.log(JSON.stringify(this.client.getState()));
   }

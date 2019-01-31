@@ -16,6 +16,6 @@ export default class Helper extends Vue {
   get color(): string {
     return playerColor(this.id);
   }
-};
+}
 
 </script>
