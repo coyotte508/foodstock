@@ -1,40 +1,40 @@
-import { Ingredient } from './enums';
+import { Ingredient, FoodType, CustomerType} from './enums';
 
 interface Customer {
+  foodName: string;
+  foodType: FoodType;
+  customerName: string;
+  customerType: CustomerType;
+  veggie: boolean;
+  blogger: boolean;
   ingredients: Array<{
     type: Ingredient,
   }>;
 
   // Money gained when fulfilling order
   moneyGained: number;
-  // Money lost when failing order
-  moneyLost: number;
+
 }
 
-export function createCustomer(id: number) {
-  // Todo: return customer based on id
-  if (id < 5) {
-    return {
-      ingredients: [],
-      moneyGained: 10,
-      moneyLost: 10,
-    };
-  } else {
-    return {
+export const CustomerCards = [
+  {
+    foodName: 'Kebab',
+    type: FoodType.Taco,
+    customerName: 'Doner',
+    customerType: CustomerType.Normal,
+    veggie: false,
+    blogger: false,
+    ingredients: ['beige','brown','green','white'],
+    moneyGained: 3,
+  },
+  {
       ingredients: [],
       moneyGained: 20,
-      moneyLost: 10,
-    };
   }
-}
+];
 
-export function createSpecialCustomer(id: number) {
-  return {
-    ingredients: [],
-    moneyGained: 0,
-    moneyLost: 0,
-  };
-}
 
-export const numberOfCustomers = 58;
-export const numberOfSpecialCustomers = 45;
+export const NormalCustomerDeck = [0,0,0,0,0,1,1];
+export const SpecialCustomerDeck = [2,2,2,2,2,2];
+
+

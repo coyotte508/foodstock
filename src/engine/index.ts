@@ -1,7 +1,7 @@
 import {Game, INVALID_MOVE} from 'boardgame.io/core';
 import { Player, createPlayer } from './player';
 import * as _ from 'lodash';
-import { numberOfCustomers, numberOfSpecialCustomers } from './customer';
+import { NormalCustomerDeck, SpecialCustomerDeck } from './customer';
 import Context from './context';
 import boards, { ActionBoard } from './action-boards';
 
@@ -35,8 +35,8 @@ const Foodstock = Game({
       // Secret key only known to server
       secret: null,
 
-      customers: _.range(0, numberOfCustomers),
-      specialCustomers: _.range(0, numberOfSpecialCustomers),
+      customers: _.range(0, NormalCustomerDeck.length - 1),
+      specialCustomers: _.range(0, SpecialCustomerDeck.length - 1),
       round: 1,
       lastRound: ctx.numPlayers <= 3 ? 3 : 4,
 

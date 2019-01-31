@@ -1,8 +1,9 @@
 import { Action } from './action';
+import { CustomerType } from './enums';
 
 export interface ActionBoard {
   id: string;
-  gainCustomer?: Array<'red' | 'black' | 'any' | 'none'>;
+  gainCustomer?: CustomerType[];
   actions: Action[][];
 }
 
@@ -10,7 +11,7 @@ export interface ActionBoard {
 const boards: ActionBoard[] = [
   // Board 1-1
   { id: "1-1",
-    gainCustomer : ['red'],
+    gainCustomer : [CustomerType.Normal],
     actions: [
       [
         {ingredients: ['beige']},
@@ -21,23 +22,23 @@ const boards: ActionBoard[] = [
       [
         {ingredients: ['brown', 'brown', 'brown']},
         {ingredients: ['brown', 'brown']},
-        {ingredients: ['brown'], customers: ['black']},
+        {ingredients: ['brown'], customers: [CustomerType.Special]},
       ],
 
       [
-        {ingredients: ['beige'], customers: ['red']},
-        {ingredients: ['beige'], customers: ['black']},
-        {ingredients: ['brown'], customers: ['any']},
+        {ingredients: ['beige'], customers: [CustomerType.Normal]},
+        {ingredients: ['beige'], customers: [CustomerType.Special]},
+        {ingredients: ['brown'], customers: [CustomerType.Any]},
       ],
 
-      [{cost: 1, customers: ['black']}],
+      [{cost: 1, customers: [CustomerType.Special]}],
 
       [{ingredients: ['brown', 'beige'], unlimitedHelpers: true, cost: 2}]
     ],
   },
   // Board 1-2
   { id: "1-2",
-    gainCustomer : ['red'],
+    gainCustomer : [CustomerType.Normal],
     actions: [
       [
         {ingredients: ['beige']},
@@ -52,9 +53,9 @@ const boards: ActionBoard[] = [
       ],
     
       [
-        {customers: ['black', 'red']},
-        {customers: ['black']},
-        {customers: ['black', 'black']},
+        {customers: [CustomerType.Special, CustomerType.Normal]},
+        {customers: [CustomerType.Special]},
+        {customers: [CustomerType.Special, CustomerType.Special]},
       ],
     
       [{cost: 2, keepHelpers: true, specialActions: ['improvementCard'] }],
