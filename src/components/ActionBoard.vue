@@ -3,8 +3,9 @@
     <use :href="'#' + boardFile" :y=offset />
 
     <g v-for="(chain, i) in chains" :key=i>
-      <g v-for="(c, j) in chain" :key=j>
-        <circle v-if="highlighted(i,j)" :cx=c[0] :cy=c[1] :r="action(i,j).unlimited ? 4 : 2" fill="transparent" stroke="green" @click="click(i,j)" />
+      <g v-for="(c, j) in chain" :key=j :transform="`translate(${c[0]}, ${c[1]})`">
+        <circle v-if="highlighted(i,j)" :cx=0 :cy=0 :r="action(i,j).unlimited ? 4 : 2" fill="transparent" stroke="green" @click="click(i,j)" />
+        <Helper v-if="action(i,j).helpers.length > 0" :id="action(i,j).helpers[0]" />
       </g>
     </g>
   </svg>
@@ -13,14 +14,20 @@
 <script lang="ts">
 import {Vue, Component, Prop} from "vue-property-decorator";
 import boardZones from '../graphics/board-zones';
+import Helper from './Helper.vue';
+import { Level } from '@/engine/enums';
 
-@Component
+@Component({
+  components: {
+    Helper
+  }
+})
 export default class ActionBoard extends Vue {
   @Prop({default: "1-1"})
   id: string;
 
   get boardFile() {
-    return this.number <= 3 ? "board1" : "board2";
+    return this.number <= Level.Level3 ? "board1" : "board2";
   }
 
   highlighted(i, j): boolean {
@@ -40,7 +47,7 @@ export default class ActionBoard extends Vue {
   }
 
   get board() {
-    return this.$store.state.foodstock.game.actionBoards[this.number - 1];
+    return this.$store.state.foodstock.game.actionBoards[this.number];
   }
 
   get chains() {
@@ -59,7 +66,7 @@ export default class ActionBoard extends Vue {
 
   // returns 1-6
   get number(): number {
-    return +this.id[0];
+    return +this.id[0] - 1;
   }
 
   get variant(): number {
@@ -67,7 +74,7 @@ export default class ActionBoard extends Vue {
   }
 
   get offset() {
-    return -10 + - (2 - ((this.number - 1) % 3)) * 23;
+    return -10 + - (2 - ((this.number) % 3)) * 23;
   }
 }
 </script>

@@ -18,7 +18,7 @@
 import {Vue, Component, Prop} from 'vue-property-decorator';
 import ActionBoard from './ActionBoard.vue';
 import SvgBase from './SvgBase.vue';
-import { GameState } from '@/engine';
+import { GameState } from '@/engine/engine';
 
 @Component({
   components: {

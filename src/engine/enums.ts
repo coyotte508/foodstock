@@ -40,3 +40,12 @@ export enum Resource {
     SatisfySpecial = "satisfyS",
     RemoveCustomer= "remove"
 }
+
+export enum Level {
+    Level1,
+    Level2,
+    Level3,
+    Level4,
+    Level5,
+    Level6,
+}

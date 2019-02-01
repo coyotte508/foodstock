@@ -1,6 +1,6 @@
 import Vue from "vue";
 import Vuex from 'vuex';
-import { GameState } from './engine';
+import { GameState } from './engine/engine';
 import { HelperPlacement } from './engine/commands';
 
 Vue.use(Vuex);
@@ -25,6 +25,8 @@ const foodstockStoreModule = {
   mutations: {
     stateChanged(state, newState) {
       if (newState) {
+        newState = JSON.parse(JSON.stringify(newState));
+
         state.game = newState.G;
         state.context = newState.ctx;
       }

@@ -1,7 +1,8 @@
-import { GameState } from '.';
+import { GameState } from './engine';
 import { Player } from './player';
+import { Level } from './enums';
 
-export type HelperPlacement = [number, number, number];
+export type HelperPlacement = [Level, number, number];
 
 /** See where a player can put helpers. Returns a list of coordinates [board, chain, action] */
 export function possibleHelperPlacements(G: GameState, pl: Player) {

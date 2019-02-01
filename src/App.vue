@@ -41,14 +41,14 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import { Client } from 'boardgame.io/client';
-import Engine, { GameState } from './engine';
+import Engine, { GameState } from './engine/engine';
 import Board from '@/components/Board.vue';
 import PlayerBoard from '@/components/PlayerBoard.vue';
 import Editor from '@/components/Editor.vue';
 import { possibleHelperPlacements } from '@/engine/commands';
 import Context from '@/engine/context';
 
-let client = null;
+// let client = null;
 
 @Component({
   components: {
@@ -63,7 +63,7 @@ let client = null;
 
     this.$store.subscribeAction(({type, payload}) => {
       if (type === 'foodstock/boardZoneClick') {
-        client.moves.placeHelper(payload);
+        this.client.moves.placeHelper(payload);
       }
     });
   }
@@ -75,16 +75,16 @@ export default class App extends Vue {
   active = "game";
 
   createGame() {
-    client = new Client({
+    this.client = new Client({
       game: Engine,
       numPlayers: 2,
     });
 
-    this.$store.commit("foodstock/stateChanged", client.getState());
+    this.$store.commit("foodstock/stateChanged", this.client.getState());
 
-    client.subscribe(state => {
+    this.client.subscribe(state => {
       console.log("new state");
-      this.$store.commit("foodstock/stateChanged", client.getState());
+      this.$store.commit("foodstock/stateChanged", this.client.getState());
       this.$store.commit("foodstock/clearHighlights");
     });
 
@@ -109,7 +109,7 @@ export default class App extends Vue {
   }
 
   levelUp() {
-    client.moves.levelUp();
+    this.client.moves.levelUp();
   }
 }
 </script>
