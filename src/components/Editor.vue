@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-layout row wrap>
-      <CustomerCard v-for="(customer,index) in customerCards" :key="index" :customer=customer @addCustomer="addCustomer" @removeCustomer="removeCustomer(index)" />
+      <CustomerCard v-for="(customer,index) in customerCards" :key="index" :customer=customer @addCustomer="addCustomer($event, index)" @removeCustomer="removeCustomer(index)" />
     </v-layout>
     <pre>
 {{data}}
@@ -28,8 +28,8 @@ export default class Editor extends Vue {
   customerCards = customerCards;
   data = '';
 
-  addCustomer(val) {
-    this.customerCards = [...this.customerCards, _.cloneDeep(val)];
+  addCustomer(val, index) {
+    this.customerCards = [...this.customerCards.slice(0, index + 1),  _.cloneDeep(val), ...this.customerCards.slice(index + 1)];
   }
 
   removeCustomer(index) {
