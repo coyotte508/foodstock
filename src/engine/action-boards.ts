@@ -38,7 +38,7 @@ const boards: ActionBoard[] = [
       {keep: true, rewards: "satisfyS"},
       ["green", "2yellow", "yellow,green,normal"],
       ["yellow", "2green", "yellow,green,normal"],
-      {keep: true, rewards: "recycle,objective"},
+      {keep: true, rewards: "recycle,objective", unlimited: true},
       "gray,normal"
     ),
     rewards: Reward.parse("normal")
@@ -79,9 +79,7 @@ const boards: ActionBoard[] = [
       {keep: true, rewards: "2satisfyN"},
       {keep: true, rewards: "1000cook,special"},
       {unlimited: true, cost: "6dollar", rewards: "improv,recycle"},
-      {keep: true, cost: "dollar", rewards: "gray", repeat: 3},
-      {keep: true, cost: "dollar", rewards: "gray", repeat: 5},
-      {keep: true, cost: "dollar", rewards: "2gray", repeat: 2}
+      [{keep: true, cost: "dollar", rewards: "gray", repeat: 3}, {keep: true, cost: "dollar", rewards: "gray", repeat: 5}, {keep: true, cost: "dollar", rewards: "2gray", repeat: 2}]
     )
   },
   // Board 5-2

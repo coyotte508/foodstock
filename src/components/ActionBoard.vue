@@ -1,19 +1,50 @@
 <template>
   <svg viewBox="0 0 58 19" class="action-board">
-    <use :href="'#' + board" :y=offset />
+    <use :href="'#' + boardFile" :y=offset />
+
+    <g v-for="(chain, i) in chains" :key=i>
+      <circle v-for="(c, j) in chain" :key=j :cx=c[0] :cy=c[1] :r="action(i,j).unlimited ? 3.8 : 2" fill=none />
+    </g>
   </svg>
 </template>
 
 <script lang="ts">
 import {Vue, Component, Prop} from "vue-property-decorator";
+import boardZones from '../graphics/board-zones';
 
 @Component
 export default class ActionBoard extends Vue {
   @Prop({default: "1-1"})
   id: string;
 
-  get board() {
+  get boardFile() {
     return this.number <= 3 ? "board1" : "board2";
+  }
+
+  action(i, j) {
+    if (!this.board.actions[i] || !this.board.actions[i][j]) {
+      console.log("impossible to find action", i, j, this.id, JSON.parse(JSON.stringify(this.board.actions)));
+    }
+
+    return this.board.actions[i][j];
+  }
+
+  get board() {
+    return this.$store.state.foodstock.game.actionBoards[this.number - 1];
+  }
+
+  get chains() {
+    return boardZones[this.id] || [];
+  }
+
+  circles(i) {
+    const chains = boardZones[this.id];
+
+    if (!chains) {
+      return [];
+    }
+
+    return [].concat(...chains);
   }
 
   // returns 1-6
