@@ -1,4 +1,3 @@
-import { Ingredient, SpecialAction, CustomerType, Resource } from './enums';
 import Reward from './reward';
 
 export interface Action {

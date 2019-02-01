@@ -12,6 +12,11 @@
     <div v-if="active === 'game'">
       <Board />
 
+      <div class="text-xs-center">
+        <v-btn @click="placeHelper">Place Helper</v-btn>
+        <v-btn @click="levelUp">Level Up</v-btn>
+      </div>
+
       <v-layout row wrap>
         <v-flex xs6>
           <PlayerBoard id="0" />
@@ -20,9 +25,6 @@
           <PlayerBoard id="1" />
         </v-flex>
       </v-layout>
-
-      <v-btn @click="placeHelper">Place Helper</v-btn>
-      <v-btn @click="levelUp">Level Up</v-btn>
 
       <p>Current player: {{state.ctx.currentPlayer}}</p>
       <p>Round: {{state.G.round}}</p>
@@ -39,10 +41,12 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import { Client } from 'boardgame.io/client';
-import Engine from './engine';
+import Engine, { GameState } from './engine';
 import Board from '@/components/Board.vue';
 import PlayerBoard from '@/components/PlayerBoard.vue';
 import Editor from '@/components/Editor.vue';
+import { possibleHelperPlacements } from '@/engine/commands';
+import Context from '@/engine/context';
 
 @Component({
   components: {
@@ -53,11 +57,19 @@ import Editor from '@/components/Editor.vue';
   watch: {
     /** Update global state when the game state changes */
     state(newVal) {
+      console.log("state changed");
       this.$store.commit("foodstock/stateChanged", newVal);
+      this.$store.commit("foodstock/clearHighlights");
     }
   },
   created(this: App) {
     this.createGame();
+
+    this.$store.subscribeAction(({type, payload}) => {
+      if (type === 'foodstock/boardZoneClick') {
+        this.client.moves.placeHelper(payload);
+      }
+    });
   }
 })
 export default class App extends Vue {
@@ -84,8 +96,21 @@ export default class App extends Vue {
     // console.log(JSON.stringify(this.client.getState()));
   }
 
+  get G(): GameState {
+    return this.$store.state.foodstock.game;
+  }
+
+  get ctx(): Context {
+    return this.$store.state.foodstock.context;
+  }
+
+  get player() {
+    return  this.G.players[this.ctx.currentPlayer];
+  }
+
   placeHelper() {
-    this.client.moves.placeHelper();
+    this.$store.commit("foodstock/highlightBoardZones", possibleHelperPlacements(this.G, this.player));
+    // this.client.moves.placeHelper();
   }
 
   levelUp() {

@@ -3,7 +3,9 @@
     <use :href="'#' + boardFile" :y=offset />
 
     <g v-for="(chain, i) in chains" :key=i>
-      <circle v-for="(c, j) in chain" :key=j :cx=c[0] :cy=c[1] :r="action(i,j).unlimited ? 3.8 : 2" fill=none />
+      <g v-for="(c, j) in chain" :key=j>
+        <circle v-if="highlighted(i,j)" :cx=c[0] :cy=c[1] :r="action(i,j).unlimited ? 4 : 2" fill="transparent" stroke="green" @click="click(i,j)" />
+      </g>
     </g>
   </svg>
 </template>
@@ -21,12 +23,20 @@ export default class ActionBoard extends Vue {
     return this.number <= 3 ? "board1" : "board2";
   }
 
+  highlighted(i, j): boolean {
+    return this.$store.state.foodstock.extra.highlight.boardZones.some(zone => zone[0] === this.number && zone[1] === i && zone[2] === j);
+  }
+
   action(i, j) {
     if (!this.board.actions[i] || !this.board.actions[i][j]) {
       console.log("impossible to find action", i, j, this.id, JSON.parse(JSON.stringify(this.board.actions)));
     }
 
     return this.board.actions[i][j];
+  }
+
+  click(i, j) {
+    this.$store.dispatch("foodstock/boardZoneClick", [this.number, i, j]);
   }
 
   get board() {
@@ -66,6 +76,10 @@ export default class ActionBoard extends Vue {
 .foodstock {
   .action-board {
     border: 1px dotted gray;
+
+    circle {
+      cursor: pointer;
+    }
   }
 }
   

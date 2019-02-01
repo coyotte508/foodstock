@@ -1,5 +1,5 @@
 <template>
-  <div class="player-info ma-2 pt-2" :style="`border: solid 1px ${color}`">
+  <div class="player-info ma-2 pt-2 text-xs-center" :style="`border: solid 1px ${color}`">
     <h3>Player {{+id + 1}}</h3>
     <svg viewBox="0 0 113 80" class="player-board">
       <use href="#player-board" :x=0 :y=0 />

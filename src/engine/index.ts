@@ -4,6 +4,7 @@ import * as _ from 'lodash';
 import { NormalCustomerDeck, SpecialCustomerDeck } from './customer';
 import Context from './context';
 import boards, { ActionBoard } from './action-boards';
+import { possibleHelperPlacements, HelperPlacement } from './commands';
 
 interface SetupData {
 
@@ -77,7 +78,19 @@ const Foodstock = Game({
     },
 
     // When placing a helper
-    placeHelper(G: GameState, ctx: Context, payload: any) {
+    placeHelper(G: GameState, ctx: Context, payload: HelperPlacement) {
+      const pl = G.players[ctx.currentPlayer];
+      const placements = possibleHelperPlacements(G, pl);
+
+      if (!placements.find(el => el.join(",") === payload.join(","))) {
+        return INVALID_MOVE;
+      }
+
+      pl.helpers --;
+      const action = G.actionBoards[payload[0]].actions[payload[1]][payload[2]];
+
+      action.helpers.push(pl.id);
+
       return G;
     },
   },
