@@ -1,5 +1,5 @@
 import { Resource } from "./enums";
-import * as assert from "assert";
+import assert from "assert";
 import * as _ from 'lodash';
 
 const resources = new Set(Object.values(Resource));

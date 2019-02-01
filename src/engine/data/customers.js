@@ -1,4 +1,4 @@
-export default [
+module.exports = [
   {
     "food": "Kebab",
     "foodType": "taco",

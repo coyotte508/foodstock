@@ -26,11 +26,11 @@
         </v-flex>
       </v-layout>
 
-      <p>Current player: {{state.ctx.currentPlayer}}</p>
-      <p>Round: {{state.G.round}}</p>
+      <p>Current player: {{ctx.currentPlayer}}</p>
+      <p>Round: {{G.round}}</p>
 
-      <pre style="text-align: left">players: {{JSON.stringify(state.G.players, null, 2)}}</pre>
-      <pre style="text-align: left">ctx: {{JSON.stringify(state.ctx, null, 2)}}</pre>
+      <pre style="text-align: left">players: {{JSON.stringify(G.players, null, 2)}}</pre>
+      <pre style="text-align: left">ctx: {{JSON.stringify(ctx, null, 2)}}</pre>
     </div>
     <div v-if="active === 'editor'">
       <Editor />
@@ -48,6 +48,8 @@ import Editor from '@/components/Editor.vue';
 import { possibleHelperPlacements } from '@/engine/commands';
 import Context from '@/engine/context';
 
+let client = null;
+
 @Component({
   components: {
     Board,
@@ -55,19 +57,13 @@ import Context from '@/engine/context';
     Editor
   },
   watch: {
-    /** Update global state when the game state changes */
-    state(newVal) {
-      console.log("state changed");
-      this.$store.commit("foodstock/stateChanged", newVal);
-      this.$store.commit("foodstock/clearHighlights");
-    }
   },
   created(this: App) {
     this.createGame();
 
     this.$store.subscribeAction(({type, payload}) => {
       if (type === 'foodstock/boardZoneClick') {
-        this.client.moves.placeHelper(payload);
+        client.moves.placeHelper(payload);
       }
     });
   }
@@ -78,20 +74,19 @@ export default class App extends Vue {
   editor = false;
   active = "game";
 
-  get state() {
-    if (!this.client) {
-      return null;
-    }
-    return this.client.getState();
-  }
-
   createGame() {
-    this.client = new Client({
+    client = new Client({
       game: Engine,
       numPlayers: 2,
     });
 
-    this.$store.commit("foodstock/stateChanged", this.state);
+    this.$store.commit("foodstock/stateChanged", client.getState());
+
+    client.subscribe(state => {
+      console.log("new state");
+      this.$store.commit("foodstock/stateChanged", client.getState());
+      this.$store.commit("foodstock/clearHighlights");
+    });
 
     // console.log(JSON.stringify(this.client.getState()));
   }
@@ -114,7 +109,7 @@ export default class App extends Vue {
   }
 
   levelUp() {
-    this.client.moves.levelUp();
+    client.moves.levelUp();
   }
 }
 </script>
