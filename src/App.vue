@@ -1,7 +1,15 @@
 <template>
-  <div id="app" class="foodstock">
-    <v-btn v-if="!client" @click="createGame" class="mb-4">Create game</v-btn>
-    <div v-if="client">
+  <v-app id="app" class="foodstock">
+    <v-toolbar app dense dark color="primary">
+      <v-toolbar-title>Foodstock</v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-toolbar-items>
+        <v-btn flat  @click="active='game'">Game</v-btn>
+        <v-btn flat  @click="active='editor'">Editor</v-btn>
+      </v-toolbar-items>
+    </v-toolbar>
+    <div style="height: 55px" />
+    <div v-if="active === 'game'">
       <Board />
 
       <v-layout row wrap>
@@ -22,7 +30,10 @@
       <pre style="text-align: left">players: {{JSON.stringify(state.G.players, null, 2)}}</pre>
       <pre style="text-align: left">ctx: {{JSON.stringify(state.ctx, null, 2)}}</pre>
     </div>
-  </div>
+    <div v-if="active === 'editor'">
+      <Editor />
+    </div>
+  </v-app>
 </template>
 
 <script lang="ts">
@@ -31,11 +42,13 @@ import { Client } from 'boardgame.io/client';
 import Engine from './engine';
 import Board from '@/components/Board.vue';
 import PlayerBoard from '@/components/PlayerBoard.vue';
+import Editor from '@/components/Editor.vue';
 
 @Component({
   components: {
     Board,
-    PlayerBoard
+    PlayerBoard,
+    Editor
   },
   watch: {
     /** Update global state when the game state changes */
@@ -50,6 +63,9 @@ import PlayerBoard from '@/components/PlayerBoard.vue';
 export default class App extends Vue {
   client: any = null;
   launched = false;
+  editor = false;
+  active = "game";
+
   get state() {
     if (!this.client) {
       return null;
@@ -80,11 +96,7 @@ export default class App extends Vue {
 
 <style lang="scss">
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 40px;
 }
 </style>

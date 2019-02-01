@@ -21,8 +21,10 @@ const foodstockStoreModule = {
   },
   mutations: {
     stateChanged(state, newState) {
-      state.game = newState.G;
-      state.context = newState.ctx;
+      if (newState) {
+        state.game = newState.G;
+        state.context = newState.ctx;
+      }
     }
   },
   actions: {

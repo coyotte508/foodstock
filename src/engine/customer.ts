@@ -1,36 +1,25 @@
-import { Ingredient, FoodType, CustomerType} from './enums';
+import { Ingredient, FoodType} from './enums';
+import rawCustomers from './data/customers.js';
+import _ from 'lodash';
 
-interface Customer {
-  foodName: string;
-  foodType: FoodType;
-  name: string;
-  customerType: CustomerType;
+export interface Customer {
+  food?: string;
+  foodType?: FoodType;
+  name?: string;
+  special: boolean;
   veggie?: boolean;
   blogger?: boolean;
-  ingredients: Array<{
-    type: Ingredient,
-  }>;
+  ingredients: Ingredient[];
 
   // Money gained when fulfilling order
-  moneyGained: number;
-
+  money: number;
 }
 
-export const CustomerCards = [
-  {
-    foodName: 'Kebab',
-    type: FoodType.Taco,
-    customerName: 'Doner',
-    customerType: CustomerType.Normal,
-    ingredients: ['beige', 'brown', 'green', 'white'],
+export const customerCards: Customer[] = _.cloneDeep(rawCustomers);
 
-    moneyGained: 3,
-  },
-  {
-      ingredients: [],
-      moneyGained: 20,
-  }
-];
+export function createCustomer(): Customer {
+  return _.cloneDeep(rawCustomers[0]);
+}
 
 
 export const NormalCustomerDeck = [0, 0, 0, 0, 0, 1, 1];
