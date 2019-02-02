@@ -1,5 +1,5 @@
 import { Ingredient, FoodType} from './enums';
-import rawCustomers from './data/customers.js';
+import rawCustomers from './data/customers';
 import _ from 'lodash';
 
 export interface Customer {

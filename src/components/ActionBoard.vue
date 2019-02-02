@@ -3,15 +3,13 @@
     <use :href="'#' + boardFile" :y=offset />
 
     <g v-for="(chain, i) in chains" :key=i>
-      <g v-for="(c, j) in chain" :key=j :transform="`translate(${c[0]}, ${c[1]})`">
+      <gt v-for="(c, j) in chain" :key=j :x=c[0] :y=c[1]>
         <circle v-if="highlighted(i,j)" :cx=0 :cy=0 :r="action(i,j).unlimited ? 4 : 2" fill="transparent" stroke="green" @click="click(i,j)" />
         <Helper v-if="action(i,j).helpers.length > 0" :id="action(i,j).helpers[0]" />
-      </g>
+      </gt>
     </g>
 
-    <g v-for="(id,i) in players" :key="'player-' + i" :transform="`translate(2, ${i*3 + 1.7})`">
-      <Helper :id=id />
-    </g>
+    <Helper :id=id :x=2 :y="i*3 + 1.7" v-for="(id,i) in players" :key="'player-' + i" />
   </svg>
 </template>
 

@@ -3,7 +3,7 @@
     <h3>Player {{+id + 1}}</h3>
     <svg viewBox="0 0 113 80" class="player-board">
       <use href="#player-board" :x=0 :y=0 />
-      <Helper :transform="`translate(${3.4+4.56*h},77)`" v-for="h in helpers" :key="'helper-' + h" :id=id />
+      <Helper :x="3.4+4.56*h" :y="77" v-for="h in helpers" :key="'helper-' + h" :id=id />
     </svg>
   </v-card>
 </template>

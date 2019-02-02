@@ -4,7 +4,9 @@ import App from './App.vue';
 import Vuetify from "vuetify";
 import "vuetify/dist/vuetify.min.css";
 import store from './store';
+import SvgG from './components/library/SvgG.vue';
 
+Vue.component("gt", SvgG);
 Vue.use(Vuetify);
 Vue.use(Vuex);
 
