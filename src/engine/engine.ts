@@ -5,7 +5,8 @@ import { NormalCustomerDeck, SpecialCustomerDeck } from './customer';
 import Context from './context';
 import boards, { ActionBoard } from './action-boards';
 import { possibleHelperPlacements, HelperPlacement } from './commands';
-import { Level } from './enums';
+import { Level, Ingredient, CookingPlate, CardPosition, Resource } from './enums';
+import Reward from './reward';
 
 interface SetupData {
 
@@ -18,6 +19,12 @@ export interface GameState {
     [key: string]: Player,
   };
 
+  ingredients: {
+    [key in Ingredient]: number
+  };
+
+  /** Resources to gain */
+  pendingResources: Reward[];
   actionBoards: ActionBoard [];
 
   nPlayers: number;
@@ -42,6 +49,8 @@ const Foodstock = Game({
       round: 1,
       lastRound: ctx.numPlayers <= 3 ? 3 : 4,
 
+      pendingResources: [],
+
       actionBoards:
         _.cloneDeep([
           boards["1-1"],
@@ -51,6 +60,17 @@ const Foodstock = Game({
           boards["5-1"],
           boards["6-1"],
         ]),
+
+      ingredients: {
+        beige: 40,
+        brown: 30,
+        green: 20,
+        red: 20,
+        white: 20,
+        pink: 20,
+        yellow: 20,
+        grey: 0
+      }
     };
 
     for (let i = 0; i < ctx.numPlayers; i++) {
@@ -92,15 +112,58 @@ const Foodstock = Game({
       const action = G.actionBoards[payload[0]].actions[payload[1]][payload[2]];
 
       action.helpers.push(pl.id);
-
-      ctx.events.endTurn();
+      G.pendingResources.push(...action.rewards);
+      ctx.events.endPhase({next: "gainResources"});
       return G;
     },
+
+    gainIngredient(G: GameState, ctx: Context, payload: {color: Ingredient, plate: CookingPlate}) {
+      return G;
+    },
+
+    gainCustomer(G: GameState, ctx: Context, payload: {special: boolean, which: CardPosition}) {
+      return G;
+    }
   },
 
   flow: {
+    startingPhase: "main",
+
+    phases: {
+      main: {
+        allowedMoves: ["levelUp", "placeHelper"],
+        onPhaseBegin(G, ctx) {
+          console.log("begin main phase");
+          return G;
+        },
+        onPhaseEnd(G, ctx) {
+          console.log("end main phase");
+          return G;
+        }
+      },
+      gainResources: {
+        allowedMoves: ["gainIngredient", "gainCustomer"],
+        onPhaseBegin(G, ctx) {
+          console.log("begin resource phase");
+          return G;
+        },
+        onPhaseEnd(G, ctx) {
+          console.log("end resource phase");
+          return G;
+        },
+        endPhaseIf(G: GameState, ctx: Context) {
+          console.log("gainResources.endPhaseIf");
+          if (G.pendingResources.length === 0) {
+            ctx.events.endTurn();
+            return true;
+          }
+        },
+        next: 'main'
+      }
+    },
+
     // End condition of the game
-    endGameIf: (G: GameState, ctx: Context) => {
+    endGameIf(G: GameState, ctx: Context) {
       if (G.round > G.lastRound) {
         const players = _.values(G.players);
 

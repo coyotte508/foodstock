@@ -1,15 +1,15 @@
 <template>
-  <v-toolbar dense top right style="top: 60px; right: 0; position: fixed" floating>
-    <v-btn 
-      flat @click="$emit('levelUp')"
+  <div class="text-xs-center" dense floating>
+    <v-btn :disabled="$context.phase !== 'main'"
+       @click="$emit('levelUp')" 
     >
       <span>Level up</span>
     </v-btn>
 
-    <v-btn
-      flat @click="$emit('placeHelper')"
+    <v-btn :disabled="$context.phase !== 'main'"
+       @click="$emit('placeHelper')"
     >
       <span>Place helper</span>
     </v-btn>
-  </v-toolbar>
+  </div>
 </template>

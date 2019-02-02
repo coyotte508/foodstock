@@ -16,3 +16,17 @@ export default Vue.extend({
 
 });
 </script>
+
+<style lang="scss">
+.foodstock {
+  svg {
+    text {
+      user-select: none;
+    }
+    .t {
+      dominant-baseline: central;
+      text-anchor: middle;
+    }
+  }
+}
+</style>

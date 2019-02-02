@@ -1,5 +1,5 @@
 export type Ingredient = 'white' | 'beige' | 'red' | 'brown' | 'pink' | 'yellow' | 'green' | 'grey';
-export const ingredientTypes = ['white', 'beige' , 'red' , 'brown' , 'pink' , 'yellow' , 'green', 'grey'];
+export const ingredientTypes = ['beige', 'brown' , 'white', 'red' , 'pink' , 'yellow' , 'green', 'grey'];
 
 export type SpecialAction = 'cookAssistant' | 'improvementCard';
 
@@ -48,4 +48,18 @@ export enum Level {
     Level4,
     Level5,
     Level6,
+}
+
+export enum CookingPlate {
+    Plate1,
+    Plate2,
+    Plate3
+}
+
+export enum CardPosition {
+    TopDeck = -1,
+    First,
+    Second,
+    Third,
+    Fourth
 }

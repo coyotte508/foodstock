@@ -13,6 +13,7 @@
       <Game />
 
       <p>Current player: {{ctx.currentPlayer}}</p>
+      <p>Phase: {{ctx.phase}}</p>
       <p>Round: {{G.round}}</p>
 
       <pre style="text-align: left">players: {{JSON.stringify(G.players, null, 2)}}</pre>

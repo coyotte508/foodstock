@@ -5,10 +5,12 @@ import Vuetify from "vuetify";
 import "vuetify/dist/vuetify.min.css";
 import store from './store';
 import SvgG from './components/library/SvgG.vue';
+import plugin from './plugin';
 
 Vue.component("gt", SvgG);
 Vue.use(Vuetify);
 Vue.use(Vuex);
+Vue.use(plugin);
 
 Vue.config.productionTip = false;
 

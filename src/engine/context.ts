@@ -6,7 +6,7 @@ export default interface Context {
   };
   events: {
     endTurn: (nextPlayer?: string) => void,
-    endPhase: () => void,
+    endPhase: (arg?: {next: string}) => void,
   };
   currentPlayer: string;
   /** Player that just moved */
