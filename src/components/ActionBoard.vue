@@ -95,7 +95,7 @@ export default class ActionBoard extends Vue {
 <style lang="scss">
 .foodstock {
   .action-board {
-    border: 1px dotted gray;
+    border: 1px solid gray;
 
     circle {
       cursor: pointer;

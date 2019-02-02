@@ -1,15 +1,8 @@
 <template>
-  <v-layout row>
+  <v-layout row wrap>
     <SvgBase />
-    <v-flex xs6>
-      <ActionBoard :id="G.actionBoards[0].id" />
-      <ActionBoard :id="G.actionBoards[2].id" />
-      <ActionBoard :id="G.actionBoards[4].id" />
-    </v-flex>
-    <v-flex xs6>
-      <ActionBoard :id="G.actionBoards[1].id" />
-      <ActionBoard :id="G.actionBoards[3].id" />
-      <ActionBoard :id="G.actionBoards[5].id" />
+    <v-flex xs12 v-for="i in [0,1,2,3,4,5]" :key=i>
+      <ActionBoard :id="G.actionBoards[i].id" />
     </v-flex>
   </v-layout>
 </template>
