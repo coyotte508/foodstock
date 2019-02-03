@@ -22,11 +22,16 @@ export default Vue.extend({
   svg {
     text {
       user-select: none;
+      pointer-events: none;
     }
     .t {
       dominant-baseline: central;
       text-anchor: middle;
     }
+  }
+
+  .draggable {
+    cursor: pointer;
   }
 }
 </style>

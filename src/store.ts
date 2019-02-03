@@ -2,6 +2,7 @@ import Vue from "vue";
 import Vuex from 'vuex';
 import { GameState } from './engine/engine';
 import { HelperPlacement } from './engine/commands';
+import { Ingredient } from './engine/enums';
 
 Vue.use(Vuex);
 
@@ -16,9 +17,7 @@ const foodstockStoreModule = {
 
       } as GameState,
       extra: {
-        highlight: {
-          boardZones: []
-        }
+        dropZones: []
       }
     };
   },
@@ -31,18 +30,20 @@ const foodstockStoreModule = {
         state.context = newState.ctx;
       }
     },
-    highlightBoardZones(state, placements) {
-      state.extra.highlight.boardZones = placements;
+    dropZones(state, ids) {
+      state.extra.dropZones = ids;
     },
     clearHighlights(state) {
-      state.extra.highlight = {
-        boardZones: []
-      };
+      state.extra.dropZones = [];
+    },
+    pickIngredientFromPool(state, color: string) {
+
     }
   },
   actions: {
     // No body, used for signalling with store.subscribeAction
-    boardZoneClick(context, zone: HelperPlacement) {}
+    boardZoneClick(context, zone: HelperPlacement) {},
+    chooseIngredient(context, color: Ingredient) {}
   },
   getters: {
   }

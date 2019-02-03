@@ -1,6 +1,6 @@
 import { GameState } from './engine';
 import { Player } from './player';
-import { Level } from './enums';
+import { Level, Resource } from './enums';
 
 export type HelperPlacement = [Level, number, number];
 
@@ -26,4 +26,8 @@ export function possibleHelperPlacements(G: GameState, pl: Player) {
   });
 
   return ret;
+}
+
+export function isPendingResource(G: GameState, resource: Resource) {
+  return G.pendingResources.some(rew => rew.count > 0 && rew.type === resource);
 }

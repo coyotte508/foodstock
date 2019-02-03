@@ -4,7 +4,7 @@
 
     <g v-for="(chain, i) in chains" :key=i>
       <gt v-for="(c, j) in chain" :key=j :x=c[0] :y=c[1]>
-        <circle v-if="highlighted(i,j)" :cx=0 :cy=0 :r="action(i,j).unlimited ? 4 : 2" fill="transparent" stroke="green" @click="click(i,j)" />
+        <DropZone :id="`board-${number}-${i}-${j}`" :radius="action(i,j).unlimited ? 4 : 2" @click="click(i,j)" />
         <Helper v-if="action(i,j).helpers.length > 0" :id="action(i,j).helpers[0]" />
       </gt>
     </g>

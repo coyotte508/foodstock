@@ -17,6 +17,7 @@
       <p>Round: {{G.round}}</p>
 
       <pre style="text-align: left">players: {{JSON.stringify(G.players, null, 2)}}</pre>
+      <pre style="text-align: left">pendingResources: {{JSON.stringify(G.pendingResources, null, 2)}}</pre>
       <pre style="text-align: left">ctx: {{JSON.stringify(ctx, null, 2)}}</pre>
     </div>
     <div v-if="active === 'editor'">
