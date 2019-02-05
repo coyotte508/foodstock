@@ -1,5 +1,7 @@
 import { Ingredient, FoodType} from './enums';
-import rawCustomers from './data/customers';
+import rawBasicCustomers from './data/basicCustomers';
+import rawSpecialCustomers from './data/specialCustomers';
+
 import _ from 'lodash';
 
 export interface Customer {
@@ -16,14 +18,24 @@ export interface Customer {
   money: number;
 }
 
-export const customerCards: Customer[] = _.cloneDeep(rawCustomers);
+export const basicCustomerCards: Customer[] = _.cloneDeep(rawBasicCustomers);
+export const specialCustomerCards: Customer[] = _.cloneDeep(rawSpecialCustomers);
 
 export function createCustomer(): Customer {
-  return _.cloneDeep(rawCustomers[0]);
+  return _.cloneDeep(rawBasicCustomers[0]);
 }
 
+// number of each different card
 
-export const NormalCustomerDeck = [0, 0, 0, 0, 0, 1, 1];
+
+export function createBasicCustomerDeck() {
+  const deckComposition = [7, 5, 7];
+  let deck: number[];
+  deckComposition.forEach( c => deck.splice( deck.length , 0, ...Array.from(Array(deckComposition[c]), x => c)));
+  return deck;
+}
+
+// cards included
 export const SpecialCustomerDeck = [0, 1, 2];
 
 
