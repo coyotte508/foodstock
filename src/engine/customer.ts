@@ -3,13 +3,14 @@ import rawCustomers from './data/customers';
 import _ from 'lodash';
 
 export interface Customer {
+  id: string;
   food?: string;
   foodType?: FoodType;
   name?: string;
   special: boolean;
   veggie?: boolean;
   blogger?: boolean;
-  ingredients: Ingredient[];
+  ingredients: Ingredient[][];
 
   // Money gained when fulfilling order
   money: number;
@@ -23,6 +24,6 @@ export function createCustomer(): Customer {
 
 
 export const NormalCustomerDeck = [0, 0, 0, 0, 0, 1, 1];
-export const SpecialCustomerDeck = [2, 2, 2, 2, 2, 2];
+export const SpecialCustomerDeck = [0, 1, 2];
 
 
