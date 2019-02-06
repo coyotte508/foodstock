@@ -25,7 +25,7 @@ export function createPlayer(ctx: Context, id: string): Player {
     money: 0,
     level: 0,
     helpers: [12, 10, 8][ctx.numPlayers - 2], // 12 for 2 players, 10 for 3, 8 for 4
-    plates: [...Array(3)],
+    plates: [{id: CookingPlate.Plate1}, {id: CookingPlate.Plate2}, {id: CookingPlate.Plate3}],
     inlineCustomers: [...Array(4)],
     servedCustomers: []
   };
