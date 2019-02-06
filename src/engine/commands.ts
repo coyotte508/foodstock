@@ -31,3 +31,19 @@ export function possibleHelperPlacements(G: GameState, pl: Player) {
 export function isPendingResource(G: GameState, resource: Resource) {
   return G.pendingResources.some(rew => rew.count > 0 && rew.type === resource);
 }
+
+export function drawSpecialCustomers(G: GameState, num: number) {
+  // discard current cards
+  if ( G.availableSpecialCustomers.length > 0 ) {
+    for (let i = 0; i < num; i++) {
+      G.discardedSpecialCustomers.push( G.availableSpecialCustomers[0]);
+      G.availableSpecialCustomers.splice(0, 1);
+    }
+  }
+
+  for (let i = 0; i < num; i++) {
+    G.availableSpecialCustomers.push( G.specialCustomers[0]);
+    G.specialCustomers.splice(0, 1);
+  }
+  return true;
+}

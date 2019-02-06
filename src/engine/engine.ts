@@ -4,7 +4,7 @@ import * as _ from 'lodash';
 import { SpecialCustomerDeck, createBasicCustomerDeck } from './customer';
 import Context from './context';
 import boards, { ActionBoard } from './action-boards';
-import { possibleHelperPlacements, HelperPlacement } from './commands';
+import { possibleHelperPlacements, HelperPlacement, drawSpecialCustomers } from './commands';
 import { Level, Ingredient, CookingPlate, CardPosition, Resource } from './enums';
 import Reward from './reward';
 
@@ -33,6 +33,13 @@ export interface GameState {
 
   customers: number[];
   specialCustomers: number[];
+  availableCustomers: number[];
+  availableSpecialCustomers: number[];
+  discardedCustomers: number[];
+  discardedSpecialCustomers: number[];
+  visibleCustomers: number;
+  visibleSpecialCustomers: number;
+
 }
 
 const Foodstock = Game({
@@ -46,6 +53,14 @@ const Foodstock = Game({
 
       customers: [...createBasicCustomerDeck()],
       specialCustomers: [...SpecialCustomerDeck],
+      availableCustomers: [],
+      availableSpecialCustomers: [],
+      discardedCustomers: [],
+      discardedSpecialCustomers: [],
+      visibleCustomers: 1,
+      visibleSpecialCustomers: 4,
+
+
       round: 1,
       lastRound: ctx.numPlayers <= 3 ? 3 : 4,
 
@@ -77,8 +92,10 @@ const Foodstock = Game({
       G.players[i] = createPlayer(ctx, '' + i);
     }
 
-    ctx.random.Shuffle(G.customers);
-    ctx.random.Shuffle(G.specialCustomers);
+    G.customers = ctx.random.Shuffle(G.customers);
+    G.specialCustomers = ctx.random.Shuffle(G.specialCustomers);
+    drawSpecialCustomers(G, G.visibleSpecialCustomers);
+
 
     return G;
    },
@@ -127,6 +144,22 @@ const Foodstock = Game({
     },
 
     gainCustomer(G: GameState, ctx: Context, payload: {special: boolean, which: CardPosition}) {
+      const pl = G.players[ctx.currentPlayer];
+      // get the card
+      const card =  payload.special ? G.availableSpecialCustomers[payload.which] : ( payload.which === CardPosition.TopDeck ? G.customers[payload.which] : G.availableCustomers[0] );
+
+      // position the card shifting the existing ones
+      pl.inlineCustomers.unshift(card);
+      const shiftCard = pl.inlineCustomers.findIndex( c => c === -1 );
+      if (shiftCard > -1) {
+        pl.inlineCustomers.slice(shiftCard, 1);
+      }
+      // a customer has to exit
+      if ( pl.inlineCustomers.length === 5) {
+        // charge the player
+        // clean up the inline
+        pl.inlineCustomers.slice(5, 1);
+      }
       return G;
     }
   },

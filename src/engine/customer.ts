@@ -31,11 +31,14 @@ export function createCustomer(): Customer {
 export function createBasicCustomerDeck() {
   const deckComposition = [7, 5, 7];
   const deck = [];
-  deckComposition.forEach( c => deck.splice( deck.length , 0, ...Array.from(Array(deckComposition[c]), x => c)));
+  for (let i = 0; i < deckComposition.length; i++) {
+    deck.push( ...Array.from(Array(deckComposition[i]), x => i) );
+  }
+  // deckComposition.forEach( c => deck.splice( deck.length , 0, ...Array.from(Array(deckComposition[c]), x => c)));
   return deck;
 }
 
 // cards included
-export const SpecialCustomerDeck = [0, 1, 2];
+export const SpecialCustomerDeck = [0, 1, 2, 3, 4, 5, 6, 7];
 
 
