@@ -120,6 +120,9 @@ const Foodstock = Game({
     },
 
     gainIngredient(G: GameState, ctx: Context, payload: {color: Ingredient, plate: CookingPlate}) {
+      const pl = G.players[ctx.currentPlayer];
+      const plate = pl.plates.find(pla => pla.id === payload.plate);
+      plate.ingredients.push(payload.color);
       return G;
     },
 

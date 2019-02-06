@@ -1,6 +1,12 @@
 import Context from './context';
 import * as _ from 'lodash';
-import { Level } from './enums';
+import { Level, Ingredient, CookingPlate } from './enums';
+
+export interface Plate {
+  id: CookingPlate;
+  ingredients?: Ingredient[];
+  active?: boolean;
+}
 
 export interface Player {
   id: string;
@@ -8,6 +14,9 @@ export interface Player {
   money: number;
   level: Level;
   helpers: number;
+  plates: Plate[];
+  inlineCustomers: number[];
+  servedCustomers: number[];
 }
 
 export function createPlayer(ctx: Context, id: string): Player {
@@ -16,6 +25,9 @@ export function createPlayer(ctx: Context, id: string): Player {
     money: 0,
     level: 0,
     helpers: [12, 10, 8][ctx.numPlayers - 2], // 12 for 2 players, 10 for 3, 8 for 4
+    plates: [...Array(3)],
+    inlineCustomers: [...Array(4)],
+    servedCustomers: []
   };
 }
 
