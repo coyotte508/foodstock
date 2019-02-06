@@ -1,6 +1,7 @@
 import { GameState } from './engine';
 import { Player } from './player';
 import { Level, Resource } from './enums';
+import Context from './context';
 
 export type HelperPlacement = [Level, number, number];
 
@@ -46,4 +47,21 @@ export function drawSpecialCustomers(G: GameState, num: number) {
     G.specialCustomers.splice(0, 1);
   }
   return true;
+}
+
+export function newCustomer(G: GameState, ctx: Context, card: number) {
+    const pl = G.players[ctx.currentPlayer];
+    // position the card shifting the existing ones
+    pl.inlineCustomers = [card, ... pl.inlineCustomers];
+    const shiftCard = pl.inlineCustomers.findIndex( c => c === -1 );
+    if (shiftCard > -1) {
+      pl.inlineCustomers.splice(shiftCard, 1);
+    }
+    // a customer has to exit
+    if ( pl.inlineCustomers.length === 5) {
+      // charge the player
+      // clean up the inline
+      pl.inlineCustomers.splice(5, 1);
+    }
+    return G;
 }

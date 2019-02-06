@@ -4,8 +4,8 @@ import * as _ from 'lodash';
 import { SpecialCustomerDeck, createBasicCustomerDeck } from './customer';
 import Context from './context';
 import boards, { ActionBoard } from './action-boards';
-import { possibleHelperPlacements, HelperPlacement, drawSpecialCustomers } from './commands';
-import { Level, Ingredient, CookingPlate, CardPosition, Resource } from './enums';
+import { possibleHelperPlacements, HelperPlacement, drawSpecialCustomers, newCustomer } from './commands';
+import { Level, Ingredient, CookingPlate, CardPosition, Resource, CustomerType } from './enums';
 import Reward from './reward';
 
 interface SetupData {
@@ -111,7 +111,11 @@ const Foodstock = Game({
 
       pl.level += 1;
       const rewards = G.actionBoards[pl.level].rewards;
-
+      if (rewards) {
+        if (rewards[0].type === Resource.NormalCustomer ) {
+          ctx.events.endPhase({next: "gainNormalCustomer"});
+        }
+      }
 
       ctx.events.endTurn();
       return G;
@@ -143,23 +147,19 @@ const Foodstock = Game({
       return G;
     },
 
-    gainCustomer(G: GameState, ctx: Context, payload: {special: boolean, which: CardPosition}) {
+    gainBasicCustomer(G: GameState, ctx: Context, payload: {which: CardPosition}) {
       const pl = G.players[ctx.currentPlayer];
-      // get the card
-      const card =  payload.special ? G.availableSpecialCustomers[payload.which] : ( payload.which === CardPosition.TopDeck ? G.customers[payload.which] : G.availableCustomers[0] );
+      const card =  payload.which === CardPosition.TopDeck ? G.customers[payload.which] : G.availableCustomers[0] ;
+      newCustomer(G, ctx, card);
+      ctx.events.endPhase();
+      return G;
+    },
 
-      // position the card shifting the existing ones
-      pl.inlineCustomers.unshift(card);
-      const shiftCard = pl.inlineCustomers.findIndex( c => c === -1 );
-      if (shiftCard > -1) {
-        pl.inlineCustomers.slice(shiftCard, 1);
-      }
-      // a customer has to exit
-      if ( pl.inlineCustomers.length === 5) {
-        // charge the player
-        // clean up the inline
-        pl.inlineCustomers.slice(5, 1);
-      }
+    gainSpecialCustomer(G: GameState, ctx: Context, payload: {which: CardPosition}) {
+      const pl = G.players[ctx.currentPlayer];
+      const card =  G.availableSpecialCustomers[payload.which] ;
+      newCustomer(G, ctx, card);
+      ctx.events.endPhase();
       return G;
     }
   },
@@ -200,6 +200,17 @@ const Foodstock = Game({
       },
       gainBasicCustomer: {
         allowedMoves: ["gainBasicCustomer"],
+        onPhaseBegin(G, ctx) {
+          console.log("begin get basic Customer card phase");
+          return G;
+        },
+        onPhaseEnd(G, ctx) {
+          console.log("end get basic Customer card phase");
+          return G;
+        },
+      },
+      gainSpecialCustomer: {
+        allowedMoves: ["gainSpecialCustomer"],
         onPhaseBegin(G, ctx) {
           console.log("begin get basic Customer card phase");
           return G;
