@@ -16,7 +16,7 @@
 <script lang="ts">
 import {Vue, Component} from 'vue-property-decorator';
 import CustomerCard from './editor/CustomerCard.vue';
-import { customerCards, createCustomer } from '@/engine/customer';
+import { basicCustomerCards as customerCards, createCustomer } from '@/engine/customer';
 import _ from 'lodash';
 
 @Component({
