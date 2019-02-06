@@ -1,6 +1,6 @@
 <template>
   <gt :x=x :y=y :scale=scale class="ingredient">
-    <circle :r=1 :cx=0 :cy=0 :fill=color stroke="#444" stroke-width=0.05 :class={draggable} @click="drag=true" @start=notifyDragStart />
+    <circle :r=1 :cx=0 :cy=0 :fill=color stroke="#444" stroke-width=0.05 :class={draggable} @click="dragStart" @start=notifyDragStart />
     <text class="t" style="font-size: 0.8px" v-if="count">{{count}}</text>
   </gt>
 </template>
@@ -18,9 +18,6 @@ export default class Ingredient extends mixins(SvgG, draggable) {
 
   @Prop({default: 0})
   count: number;
-
-  @Prop({default: false})
-  draggable: boolean;
 
   notifyDragStart() {
     this.$store.dispatch("foodstock/chooseIngredient", this.color);

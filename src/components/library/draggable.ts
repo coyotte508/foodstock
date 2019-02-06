@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import {Component, Vue} from "vue-property-decorator";
+import {Component, Vue, Prop} from "vue-property-decorator";
 
 @Component({
   created() {
@@ -30,8 +30,15 @@ export default class Draggable extends Vue {
   mouseX = 0;
   mouseY = 0;
 
+  @Prop({default: true})
+  draggable: boolean;
+
   dragStart() {
     console.log('drag start');
+
+    if (!this.draggable) {
+      return;
+    }
 
     if (this.draggingElement) {
       console.log('Already dragging elemnt');
