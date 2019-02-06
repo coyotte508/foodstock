@@ -1,7 +1,7 @@
 import {Game, INVALID_MOVE} from 'boardgame.io/core';
 import { Player, createPlayer } from './player';
 import * as _ from 'lodash';
-import { NormalCustomerDeck, SpecialCustomerDeck, createBasicCustomerDeck } from './customer';
+import { SpecialCustomerDeck, createBasicCustomerDeck } from './customer';
 import Context from './context';
 import boards, { ActionBoard } from './action-boards';
 import { possibleHelperPlacements, HelperPlacement } from './commands';
@@ -93,6 +93,8 @@ const Foodstock = Game({
       }
 
       pl.level += 1;
+      const rewards = G.actionBoards[pl.level].rewards;
+
 
       ctx.events.endTurn();
       return G;
@@ -159,7 +161,18 @@ const Foodstock = Game({
           }
         },
         next: 'main'
-      }
+      },
+      gainBasicCustomer: {
+        allowedMoves: ["gainBasicCustomer"],
+        onPhaseBegin(G, ctx) {
+          console.log("begin get basic Customer card phase");
+          return G;
+        },
+        onPhaseEnd(G, ctx) {
+          console.log("end get basic Customer card phase");
+          return G;
+        },
+      },
     },
 
     // End condition of the game

@@ -30,7 +30,7 @@ export function createCustomer(): Customer {
 
 export function createBasicCustomerDeck() {
   const deckComposition = [7, 5, 7];
-  let deck: number[];
+  const deck = [];
   deckComposition.forEach( c => deck.splice( deck.length , 0, ...Array.from(Array(deckComposition[c]), x => c)));
   return deck;
 }
