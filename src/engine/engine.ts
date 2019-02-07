@@ -271,7 +271,14 @@ const Foodstock = Game({
   },
 
   // State viewable by specific player (hide cards)
-  // playerView: (G, ctx, playerId) => ({}),
+  playerView: (G: GameState, ctx, playerId) => {
+    const secret = _.cloneDeep(G);
+
+    secret.customers.basic.deck = secret.customers.basic.deck.map(x => 0);
+    secret.customers.special.deck = secret.customers.special.deck.map(x => 0);
+
+    return secret;
+  },
 });
 
 
