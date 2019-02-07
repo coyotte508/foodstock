@@ -61,5 +61,14 @@ export enum CardPosition {
     First,
     Second,
     Third,
-    Fourth
+    Fourth,
+    Fifth
+}
+
+export enum WaitingCustomerPosition {
+    First,
+    Second,
+    Third,
+    Fourth,
+    Last = Fourth
 }

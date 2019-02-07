@@ -1,6 +1,6 @@
 import { GameState } from './engine';
 import { Player } from './player';
-import { Level, Resource } from './enums';
+import { Level, Resource, WaitingCustomerPosition } from './enums';
 import Context from './context';
 import { specialCustomerCards, basicCustomerCards } from './customer';
 import * as _ from "lodash";
@@ -41,15 +41,27 @@ export function addCustomer(G: GameState, ctx: Context, card: number, special: b
   const pl = G.players[ctx.currentPlayer];
 
   const customer = _.cloneDeep(special ? specialCustomerCards[card] : basicCustomerCards[card]);
-  // position the card shifting the existing ones
-  pl.customers.waiting = [customer, ... pl.customers.waiting];
 
-  while (pl.customers.waiting.length > 4) {
-    const lastCustomer = pl.customers.waiting.pop();
+  // Shift existing customers
+  const shift = (pos: WaitingCustomerPosition) => {
+    if (pl.customers[pos] === null) {
+      return;
+    }
 
-    pl.money -= 2;
-    deck.discard.push(+lastCustomer.id);
-  }
+    const shiftedCustomer = pl.customers[pos];
+    pl.customers[pos] = null;
+
+    if (pos === WaitingCustomerPosition.Last) {
+      pl.money -= 2;
+      deck.discard.push(+shiftedCustomer.id);
+    } else {
+      shift(pos + 1);
+      pl.customers[pos + 1] = shiftedCustomer;
+    }
+  };
+
+  shift(WaitingCustomerPosition.First);
+  pl.customers[0] = customer;
 
   return G;
 }
