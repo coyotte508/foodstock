@@ -49,7 +49,7 @@ const Foodstock = Game({
 
       customers: {
         basic: {deck: createBasicCustomerDeck(), discard: [], available: [], visible: 1},
-        special: {deck: [...SpecialCustomerDeck], discard: [], available: [], visible: ctx.numPlayers + 2},
+        special: {deck: [...SpecialCustomerDeck], discard: [], available: [], visible: ctx.numPlayers + 1},
       },
 
       round: 1,
@@ -173,8 +173,10 @@ const Foodstock = Game({
         [card] = DeckZone.draw(deck, 1);
       } else {
         card = DeckZone.pick(deck, payload.which);
-        DeckZone.clear(deck);
-        DeckZone.show(deck);
+
+        if (deck.available.length === 0) {
+          DeckZone.show(deck);
+        }
       }
 
       addCustomer(G, ctx, card, special);
@@ -203,8 +205,15 @@ const Foodstock = Game({
           console.log("begin resource phase");
           return G;
         },
-        onPhaseEnd(G, ctx) {
+        onPhaseEnd(G: GameState, ctx) {
           console.log("end resource phase");
+
+          // Replace special customer cards if some were taken
+          if (G.customers.special.available.length < G.customers.special.visible) {
+            DeckZone.clear(G.customers.special);
+            DeckZone.show(G.customers.special);
+          }
+
           return G;
         },
         endPhaseIf(G: GameState, ctx: Context) {
