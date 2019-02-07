@@ -141,6 +141,18 @@ const Foodstock = Game({
     },
 
     gainIngredient(G: GameState, ctx: Context, payload: {color: Ingredient, plate: CookingPlate}) {
+      console.log("gain ingredient", payload);
+      let useGray = false;
+
+      if (!Reward.includes(G.pendingResources, [new Reward(1, payload.color as Resource)])) {
+        useGray = true;
+      }
+
+      if (useGray && !Reward.includes(G.pendingResources, [new Reward(1, Resource.GreyIngredient)])) {
+        return INVALID_MOVE;
+      }
+
+      G.pendingResources = Reward.merge(G.pendingResources, [new Reward(-1, useGray ? Resource.GreyIngredient : payload.color as Resource)]);
       const pl = G.players[ctx.currentPlayer];
       const plate = pl.plates.find(pla => pla.id === payload.plate);
       plate.ingredients.push(payload.color);

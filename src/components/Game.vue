@@ -46,10 +46,11 @@ import IngredientPool from '@/components/IngredientPool.vue';
       console.log("Receive action", type, payload);
       if (type === 'foodstock/boardZoneClick') {
         this.client.moves.placeHelper(payload);
-      } else if (type === 'foodstock/chooseIngredient') {
-        const id = this.$context.currentPlayer;
-        this.$store.commit("foodstock/dropZones", [`plate-${id}-0`, `plate-${id}-1`, `plate-${id}-2`]);
-        // context.commit("foodstock/pickIngredientFromPool", payload);
+      } else if (type === 'foodstock/clickPlate') {
+        const plateNumber = payload;
+        const color = this.$dragged;
+
+        this.client.moves.gainIngredient(plateNumber, color);
       }
     });
   }
@@ -71,7 +72,8 @@ export default class Game extends Vue {
     this.client.subscribe(state => {
       console.log("new state");
       this.$store.commit("foodstock/stateChanged", this.client.getState());
-      this.$store.commit("foodstock/clearHighlights");
+      this.$clearDrag();
+      this.$clearHighlights();
     });
 
     // console.log(JSON.stringify(this.client.getState()));

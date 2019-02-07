@@ -17,7 +17,8 @@ const foodstockStoreModule = {
 
       } as GameState,
       extra: {
-        dropZones: []
+        dropZones: [],
+        dragged: ""
       }
     };
   },
@@ -38,12 +39,26 @@ const foodstockStoreModule = {
     },
     pickIngredientFromPool(state, color: string) {
 
+    },
+    dragged(state, what: string) {
+      state.extra.dragged = what;
+    },
+    clearDrag(state) {
+      state.extra.dragged = null;
     }
   },
   actions: {
     // No body, used for signalling with store.subscribeAction
     boardZoneClick(context, zone: HelperPlacement) {},
-    chooseIngredient(context, color: Ingredient) {}
+    chooseIngredient({state, commit}, color: Ingredient) {
+      commit("dragged", color);
+
+      const id = state.context.currentPlayer;
+      commit("dropZones", [`plate-${id}-0`, `plate-${id}-1`, `plate-${id}-2`]);
+    },
+    clickPlate({state, commit}, plate: number) {
+
+    }
   },
   getters: {
   }

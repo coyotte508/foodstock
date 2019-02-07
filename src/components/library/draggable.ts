@@ -20,6 +20,11 @@ import {Component, Vue, Prop} from "vue-property-decorator";
       } else {
         this.dragStop();
       }
+    },
+    draggedData(newVal) {
+      if (!newVal) {
+        this.dragStop();
+      }
     }
   }
 })
@@ -32,6 +37,10 @@ export default class Draggable extends Vue {
 
   @Prop({default: true})
   draggable: boolean;
+
+  get draggedData() {
+    return this.$store.state.foodstock.extras.dragged;
+  }
 
   dragStart() {
     console.log('drag start');
@@ -64,6 +73,8 @@ export default class Draggable extends Vue {
     this.drag = true;
     this.$emit("start");
     console.log("emitting start event");
+
+    (window as any).dragged = this;
   }
 
   dragStop() {
@@ -74,6 +85,7 @@ export default class Draggable extends Vue {
 
     this.draggingElement.remove();
     this.draggingElement = null;
+    (window as any).dragged = null;
 
     this.drag = false;
     this.$emit("stop");

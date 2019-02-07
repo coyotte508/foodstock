@@ -32,5 +32,16 @@ export default {
         return this.$store.state.foodstock.context;
       }
     });
+    Object.defineProperty(Vue.prototype, "$dragged", {
+      get() {
+        return this.$store.state.foodstock.extra.dragged;
+      }
+    });
+    Vue.prototype.$clearDrag = function() {
+      this.$store.commit('foodstock/clearDrag');
+    };
+    Vue.prototype.$clearHighlights = function() {
+      this.$store.commit('foodstock/clearHighlights');
+    };
   }
 };
