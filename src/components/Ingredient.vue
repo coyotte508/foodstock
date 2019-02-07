@@ -1,6 +1,6 @@
 <template>
   <gt :x=x :y=y :scale=scale class="ingredient">
-    <circle :r=1 :cx=0 :cy=0 :fill=color stroke="#444" stroke-width=0.05 :class={draggable} @click="dragStart" @start=notifyDragStart />
+    <circle :r=1 :cx=0 :cy=0 :fill=color stroke="#444" stroke-width=0.05 :class={draggable} @click="dragStart" />
     <text class="t" style="font-size: 0.8px" v-if="count">{{count}}</text>
   </gt>
 </template>
@@ -11,7 +11,11 @@ import {Vue, Component, Prop} from "vue-property-decorator";
 import SvgG from '@/components/library/SvgG.vue';
 import draggable from './library/draggable';
 
-@Component
+@Component({
+  created() {
+    this.$on("start", () => this.notifyDragStart());
+  }
+})
 export default class Ingredient extends mixins(SvgG, draggable) {
   @Prop()
   color: string;
@@ -20,6 +24,7 @@ export default class Ingredient extends mixins(SvgG, draggable) {
   count: number;
 
   notifyDragStart() {
+    console.log("Dispatching chooseIngredient");
     this.$store.dispatch("foodstock/chooseIngredient", this.color);
   }
 }

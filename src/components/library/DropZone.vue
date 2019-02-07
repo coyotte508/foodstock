@@ -1,6 +1,6 @@
 <template>
   <gt :x=x :y=y class="dropzone">
-    <circle :cx=0 :cy=0 :r="radius" fill="transparent" stroke="green" @click="$emit('click')" v-if="highlighted" />
+    <circle :cx=0 :cy=0 :r="radius" stroke="green" @click="$emit('click')" v-if="highlighted" />
   </gt>
 </template>
 
@@ -22,3 +22,18 @@ export default class DropZone extends SvgG {
 }
 
 </script>
+
+<style lang="scss">
+
+.foodstock {
+  .dropzone {
+    circle {
+      fill: transparent;
+
+      &:hover {
+        fill: lightblue;
+      }
+    }
+  }
+}
+</style>

@@ -54,19 +54,23 @@ export default class Draggable extends Vue {
     const clone = $(this.$el).clone().removeClass('draggable').attr("transform", null);
     this.draggingElement = $(`<svg viewBox='${bbox.x - bbox.width * 0.05} ${bbox.y - bbox.height * 0.05} ${bbox.width * 1.1} ${bbox.height * 1.1}'>`).append(clone);
     this.draggingElement.css('position', 'absolute');
+    this.draggingElement.css('pointer-events', 'none');
     this.draggingElement.attr("width", rect.width);
     this.draggingElement.attr("height", rect.height);
+    document.body.style.cursor = "pointer";
     this.updateDraggingElementPosition();
 
     $(".foodstock").append(this.draggingElement);
     this.drag = true;
     this.$emit("start");
+    console.log("emitting start event");
   }
 
   dragStop() {
     if (!this.draggingElement) {
       return;
     }
+    document.body.style.cursor = "default";
 
     this.draggingElement.remove();
     this.draggingElement = null;

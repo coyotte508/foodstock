@@ -1,6 +1,6 @@
 <template>
   <svg viewBox="0 0 17 2.4" class="ingredient-pool">
-    <Ingredient :color=color :count=count(color) :y=1.2 :x="i*2.4 + 1.2" v-for="(color,i) in colors" :key="color" @click="colorClick(color)" :draggable=draggable(color) />
+    <Ingredient :color=color :count=count(color) :y=1.2 :x="i*2.4 + 1.2" v-for="(color,i) in colors" :key="color" :draggable=draggable(color) />
   </svg>
 </template>
 
@@ -34,10 +34,6 @@ export default class IngredientPool extends Vue {
   count(color) {
     // console.log(color);
     return this.$game.ingredients[color];
-  }
-
-  colorClick(color) {
-    // this.$store.dispatch("foodstock/boardZoneClick", [this.number, i, j]);
   }
 }
 </script>

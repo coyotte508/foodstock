@@ -4,6 +4,7 @@
     <svg viewBox="0 0 113 80" class="player-board">
       <use href="#player-board" :x=0 :y=0 />
       <Helper :x="3.4+4.56*h" :y="77" v-for="h in helpers" :key="'helper-' + h" :id=id />
+      <DropZone :id="`plate-${id}-${i}`" v-for="i in [0, 1, 2]" :key="`p${id}-plate${i}`" :x="plateX(i)" :y=47.5 :radius=5.8 /> 
     </svg>
   </v-card>
 </template>
@@ -26,6 +27,10 @@ export default class PlayerBoard extends Vue {
 
   get player(): Player {
     return this.$game.players[this.id];
+  }
+
+  plateX(index: number) {
+    return [8.7, 24, 44.5][index];
   }
 
   get helpers(): number[] {

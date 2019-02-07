@@ -43,6 +43,7 @@ import IngredientPool from '@/components/IngredientPool.vue';
     this.createGame();
 
     this.$store.subscribeAction(({type, payload}) => {
+      console.log("Receive action", type, payload);
       if (type === 'foodstock/boardZoneClick') {
         this.client.moves.placeHelper(payload);
       } else if (type === 'foodstock/chooseIngredient') {
