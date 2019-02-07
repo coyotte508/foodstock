@@ -4,9 +4,10 @@ import * as _ from 'lodash';
 import { SpecialCustomerDeck, createBasicCustomerDeck } from './customer';
 import Context from './context';
 import boards, { ActionBoard } from './action-boards';
-import { possibleHelperPlacements, HelperPlacement, drawSpecialCustomers, newCustomer } from './commands';
+import { possibleHelperPlacements, HelperPlacement, addCustomer, isPendingResource } from './commands';
 import { Level, Ingredient, CookingPlate, CardPosition, Resource, CustomerType, ingredientTypes } from './enums';
 import Reward from './reward';
+import { DeckZone } from './deckzone';
 
 interface SetupData {
 
@@ -31,15 +32,10 @@ export interface GameState {
   round: number;
   lastRound: number;
 
-  customers: number[];
-  specialCustomers: number[];
-  availableCustomers: number[];
-  availableSpecialCustomers: number[];
-  discardedCustomers: number[];
-  discardedSpecialCustomers: number[];
-  visibleCustomers: number;
-  visibleSpecialCustomers: number;
-
+  customers: {
+    basic: DeckZone<number>;
+    special: DeckZone<number>;
+  };
 }
 
 const Foodstock = Game({
@@ -51,15 +47,10 @@ const Foodstock = Game({
       // Secret key only known to server
       secret: null,
 
-      customers: [...createBasicCustomerDeck()],
-      specialCustomers: [...SpecialCustomerDeck],
-      availableCustomers: [],
-      availableSpecialCustomers: [],
-      discardedCustomers: [],
-      discardedSpecialCustomers: [],
-      visibleCustomers: 1,
-      visibleSpecialCustomers: 4,
-
+      customers: {
+        basic: {deck: createBasicCustomerDeck(), discard: [], available: [], visible: 1},
+        special: {deck: [...SpecialCustomerDeck], discard: [], available: [], visible: ctx.numPlayers + 2},
+      },
 
       round: 1,
       lastRound: ctx.numPlayers <= 3 ? 3 : 4,
@@ -92,10 +83,11 @@ const Foodstock = Game({
       G.players[i] = createPlayer(ctx, '' + i);
     }
 
-    G.customers = ctx.random.Shuffle(G.customers);
-    G.specialCustomers = ctx.random.Shuffle(G.specialCustomers);
-    drawSpecialCustomers(G, G.visibleSpecialCustomers);
+    G.customers.basic.deck = ctx.random.Shuffle(G.customers.basic.deck);
+    G.customers.special.deck = ctx.random.Shuffle(G.customers.special.deck);
 
+    DeckZone.show(G.customers.basic);
+    DeckZone.show(G.customers.special);
 
     return G;
    },
@@ -152,11 +144,11 @@ const Foodstock = Game({
 
       let useGray = false;
 
-      if (!Reward.includes(G.pendingResources, [new Reward(1, color as Resource)])) {
+      if (!isPendingResource(G, color as Resource)) {
         useGray = true;
       }
 
-      if (useGray && !Reward.includes(G.pendingResources, [new Reward(1, Resource.GrayIngredient)])) {
+      if (useGray && !isPendingResource(G, Resource.GrayIngredient)) {
         return INVALID_MOVE;
       }
 
@@ -170,21 +162,24 @@ const Foodstock = Game({
       return G;
     },
 
-    gainBasicCustomer(G: GameState, ctx: Context, payload: {which: CardPosition}) {
-      const pl = G.players[ctx.currentPlayer];
-      const card =  payload.which === CardPosition.TopDeck ? G.customers[payload.which] : G.availableCustomers[0] ;
-      newCustomer(G, ctx, card);
-      ctx.events.endPhase();
+    gainCustomer(G: GameState, ctx: Context, payload: {which: CardPosition, special: boolean}) {
+      const {which, special} = payload;
+
+      const deck = special ? G.customers.special : G.customers.basic;
+
+      let card: number = null;
+
+      if (payload.which === CardPosition.TopDeck) {
+        [card] = DeckZone.draw(deck, 1);
+      } else {
+        card = DeckZone.pick(deck, payload.which);
+        DeckZone.clear(deck);
+        DeckZone.show(deck);
+      }
+
+      addCustomer(G, ctx, card, special);
       return G;
     },
-
-    gainSpecialCustomer(G: GameState, ctx: Context, payload: {which: CardPosition}) {
-      const pl = G.players[ctx.currentPlayer];
-      const card =  G.availableSpecialCustomers[payload.which] ;
-      newCustomer(G, ctx, card);
-      ctx.events.endPhase();
-      return G;
-    }
   },
 
   flow: {

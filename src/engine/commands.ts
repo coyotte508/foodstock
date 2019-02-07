@@ -2,6 +2,8 @@ import { GameState } from './engine';
 import { Player } from './player';
 import { Level, Resource } from './enums';
 import Context from './context';
+import { specialCustomerCards, basicCustomerCards } from './customer';
+import * as _ from "lodash";
 
 export type HelperPlacement = [Level, number, number];
 
@@ -33,35 +35,21 @@ export function isPendingResource(G: GameState, resource: Resource) {
   return G.pendingResources.some(rew => rew.count > 0 && rew.type === resource);
 }
 
-export function drawSpecialCustomers(G: GameState, num: number) {
-  // discard current cards
-  if ( G.availableSpecialCustomers.length > 0 ) {
-    for (let i = 0; i < num; i++) {
-      G.discardedSpecialCustomers.push( G.availableSpecialCustomers[0]);
-      G.availableSpecialCustomers.splice(0, 1);
-    }
+export function addCustomer(G: GameState, ctx: Context, card: number, special: boolean) {
+  const deck = special ? G.customers.special : G.customers.basic;
+
+  const pl = G.players[ctx.currentPlayer];
+
+  const customer = _.cloneDeep(special ? specialCustomerCards[card] : basicCustomerCards[card]);
+  // position the card shifting the existing ones
+  pl.customers.waiting = [customer, ... pl.customers.waiting];
+
+  while (pl.customers.waiting.length > 4) {
+    const lastCustomer = pl.customers.waiting.pop();
+
+    pl.money -= 2;
+    deck.discard.push(+lastCustomer.id);
   }
 
-  for (let i = 0; i < num; i++) {
-    G.availableSpecialCustomers.push( G.specialCustomers[0]);
-    G.specialCustomers.splice(0, 1);
-  }
-  return true;
-}
-
-export function newCustomer(G: GameState, ctx: Context, card: number) {
-    const pl = G.players[ctx.currentPlayer];
-    // position the card shifting the existing ones
-    pl.inlineCustomers = [card, ... pl.inlineCustomers];
-    const shiftCard = pl.inlineCustomers.findIndex( c => c === -1 );
-    if (shiftCard > -1) {
-      pl.inlineCustomers.splice(shiftCard, 1);
-    }
-    // a customer has to exit
-    if ( pl.inlineCustomers.length === 5) {
-      // charge the player
-      // clean up the inline
-      pl.inlineCustomers.splice(5, 1);
-    }
-    return G;
+  return G;
 }
