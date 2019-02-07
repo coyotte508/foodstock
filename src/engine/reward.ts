@@ -26,6 +26,7 @@ export default class Reward {
     }
 
     if (type === Resource.None || !resources.has(type)) {
+      console.error("No resource", type);
       this.count = 0;
       this.type = Resource.None;
     } else {

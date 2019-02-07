@@ -1,5 +1,5 @@
-export type Ingredient = 'white' | 'beige' | 'red' | 'brown' | 'pink' | 'yellow' | 'green' | 'grey';
-export const ingredientTypes = ['beige', 'brown' , 'white', 'red' , 'pink' , 'yellow' , 'green', 'grey'];
+export type Ingredient = 'white' | 'beige' | 'red' | 'brown' | 'pink' | 'yellow' | 'green' | 'gray';
+export const ingredientTypes = ['beige', 'brown' , 'white', 'red' , 'pink' , 'yellow' , 'green', 'gray'];
 
 export type SpecialAction = 'cookAssistant' | 'improvementCard';
 
@@ -26,7 +26,7 @@ export enum Resource {
     PinkIngredient = 'pink',
     YellowIngredient = 'yellow',
     GreenIngredient = 'green',
-    GreyIngredient = 'grey',
+    GrayIngredient = 'gray',
     NormalCustomer = 'normal',
     SpecialCustomer = 'special',
     AnyCustomer = 'any',

@@ -4,13 +4,14 @@
     <svg viewBox="0 0 113 80" class="player-board">
       <use href="#player-board" :x=0 :y=0 />
       <Helper :x="3.4+4.56*h" :y="77" v-for="h in helpers" :key="'helper-' + h" :id=id />
-      <DropZone :id="`plate-${id}-${i}`" v-for="i in [0, 1, 2]" :key="`p${id}-plate${i}`" :x="plateX(i)" :y=47.5 :radius=5.8 @click="drop(i)" /> 
+      <Plate v-for="i in [0, 1, 2]" :key="`p${id}-plate${i}`" :player=id :number=i :x="plateX(i)" :y=47.5 />
     </svg>
   </v-card>
 </template>
 
 <script lang="ts">
 import Helper from './Helper.vue';
+import Plate from './Plate.vue';
 import {Vue, Component, Prop} from "vue-property-decorator";
 import { Player } from '@/engine/player';
 import _ from "lodash";
@@ -18,7 +19,7 @@ import { playerColor } from '@/graphics/player-color';
 
 @Component({
   components: {
-    Helper
+    Helper, Plate
   }
 })
 export default class PlayerBoard extends Vue {
@@ -27,10 +28,6 @@ export default class PlayerBoard extends Vue {
 
   get player(): Player {
     return this.$game.players[this.id];
-  }
-
-  drop(plate: number) {
-    this.$store.dispatch("foodstock/clickPlate", plate);
   }
 
   plateX(index: number) {

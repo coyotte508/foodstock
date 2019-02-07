@@ -24,11 +24,11 @@ export default class IngredientPool extends Vue {
   }
 
   get colors() {
-    return ingredientTypes.filter(ing => ing !== 'grey');
+    return ingredientTypes.filter(ing => ing !== 'gray');
   }
 
   draggable(color) {
-    return isPendingResource(this.$game, color);
+    return isPendingResource(this.$game, color) && !this.$dragged;
   }
 
   count(color) {

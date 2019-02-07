@@ -12,7 +12,7 @@
     <div v-if="active === 'game'">
       <Game />
 
-      <p>Current player: {{ctx.currentPlayer}}</p>
+      <p>Turn: <b>Player {{+ctx.currentPlayer + 1}}</b></p>
       <p>Phase: {{ctx.phase}}</p>
       <p>Round: {{G.round}}</p>
 

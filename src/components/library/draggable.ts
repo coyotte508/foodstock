@@ -39,7 +39,7 @@ export default class Draggable extends Vue {
   draggable: boolean;
 
   get draggedData() {
-    return this.$store.state.foodstock.extras.dragged;
+    return this.$dragged;
   }
 
   dragStart() {

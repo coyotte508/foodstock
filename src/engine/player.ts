@@ -4,7 +4,7 @@ import { Level, Ingredient, CookingPlate } from './enums';
 
 export interface Plate {
   id: CookingPlate;
-  ingredients?: Ingredient[];
+  ingredients: Ingredient[];
   active?: boolean;
 }
 
@@ -25,7 +25,7 @@ export function createPlayer(ctx: Context, id: string): Player {
     money: 0,
     level: 0,
     helpers: [12, 10, 8][ctx.numPlayers - 2], // 12 for 2 players, 10 for 3, 8 for 4
-    plates: [{id: CookingPlate.Plate1}, {id: CookingPlate.Plate2}, {id: CookingPlate.Plate3}],
+    plates: [{id: CookingPlate.Plate1, ingredients: []}, {id: CookingPlate.Plate2, ingredients: []}, {id: CookingPlate.Plate3, ingredients: []}],
     inlineCustomers: [-1, -1, -1, -1],
     servedCustomers: []
   };

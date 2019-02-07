@@ -47,10 +47,10 @@ import IngredientPool from '@/components/IngredientPool.vue';
       if (type === 'foodstock/boardZoneClick') {
         this.client.moves.placeHelper(payload);
       } else if (type === 'foodstock/clickPlate') {
-        const plateNumber = payload;
+        const plate = payload;
         const color = this.$dragged;
 
-        this.client.moves.gainIngredient(plateNumber, color);
+        this.client.moves.gainIngredient({plate, color});
       }
     });
   }

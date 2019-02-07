@@ -41,9 +41,11 @@ const foodstockStoreModule = {
 
     },
     dragged(state, what: string) {
+      console.log("set drag", what);
       state.extra.dragged = what;
     },
     clearDrag(state) {
+      console.log("clear drag");
       state.extra.dragged = null;
     }
   },

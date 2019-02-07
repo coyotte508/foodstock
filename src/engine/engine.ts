@@ -5,7 +5,7 @@ import { SpecialCustomerDeck, createBasicCustomerDeck } from './customer';
 import Context from './context';
 import boards, { ActionBoard } from './action-boards';
 import { possibleHelperPlacements, HelperPlacement, drawSpecialCustomers, newCustomer } from './commands';
-import { Level, Ingredient, CookingPlate, CardPosition, Resource, CustomerType } from './enums';
+import { Level, Ingredient, CookingPlate, CardPosition, Resource, CustomerType, ingredientTypes } from './enums';
 import Reward from './reward';
 
 interface SetupData {
@@ -84,7 +84,7 @@ const Foodstock = Game({
         white: 20,
         pink: 20,
         yellow: 20,
-        grey: 0
+        gray: 0
       }
     };
 
@@ -142,20 +142,31 @@ const Foodstock = Game({
 
     gainIngredient(G: GameState, ctx: Context, payload: {color: Ingredient, plate: CookingPlate}) {
       console.log("gain ingredient", payload);
-      let useGray = false;
 
-      if (!Reward.includes(G.pendingResources, [new Reward(1, payload.color as Resource)])) {
-        useGray = true;
-      }
+      const color = payload.color;
 
-      if (useGray && !Reward.includes(G.pendingResources, [new Reward(1, Resource.GreyIngredient)])) {
+      if (!ingredientTypes.includes(color)) {
+        console.log("wrong color", color);
         return INVALID_MOVE;
       }
 
-      G.pendingResources = Reward.merge(G.pendingResources, [new Reward(-1, useGray ? Resource.GreyIngredient : payload.color as Resource)]);
+      let useGray = false;
+
+      if (!Reward.includes(G.pendingResources, [new Reward(1, color as Resource)])) {
+        useGray = true;
+      }
+
+      if (useGray && !Reward.includes(G.pendingResources, [new Reward(1, Resource.GrayIngredient)])) {
+        return INVALID_MOVE;
+      }
+
+      console.log("merging resources", JSON.stringify(G.pendingResources), [new Reward(-1, useGray ? Resource.GrayIngredient : color as Resource)]);
+      G.pendingResources = Reward.merge(G.pendingResources, [new Reward(-1, useGray ? Resource.GrayIngredient : color as Resource)]);
+
       const pl = G.players[ctx.currentPlayer];
       const plate = pl.plates.find(pla => pla.id === payload.plate);
       plate.ingredients.push(payload.color);
+
       return G;
     },
 
@@ -203,6 +214,7 @@ const Foodstock = Game({
         },
         endPhaseIf(G: GameState, ctx: Context) {
           console.log("gainResources.endPhaseIf");
+          console.log(G.pendingResources);
           if (G.pendingResources.length === 0) {
             ctx.events.endTurn();
             return true;

@@ -1,6 +1,6 @@
 <template>
-  <gt :x=x :y=y :scale=scale class="ingredient">
-    <circle :r=1 :cx=0 :cy=0 :fill=color stroke="#444" stroke-width=0.05 :class={draggable} @click="dragStart" />
+  <gt :x=x :y=y :scale=scale :class="['ingredient', {draggable}]">
+    <circle :r=1 :cx=0 :cy=0 :fill=color stroke="#444" stroke-width=0.05 @click="dragStart" />
     <text class="t" style="font-size: 0.8px" v-if="count">{{count}}</text>
   </gt>
 </template>
@@ -42,8 +42,9 @@ export default class Ingredient extends mixins(SvgG, draggable) {
       // stroke-linejoin: miter;
     }
 
-    circle.draggable {
+    &.draggable circle {
       stroke: green;
+      stroke-width: 0.2;
       cursor: pointer;
     }
   }

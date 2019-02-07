@@ -49,9 +49,9 @@ const boards: ActionBoard[] = [
   {
     id: "3-1",
     actions: arr(
-      ['2brown', {keep: true, rewards: '3grey,special'}, '2beige,brown'],
+      ['2brown', {keep: true, rewards: '3gray,special'}, '2beige,brown'],
       ["2beige", "2brown", "2gray"],
-      ["grey", "2grey,normal", "2grey"],
+      ["gray", "2gray,normal", "2gray"],
       ["normal,any", {repeat: -1, cost: "gray", rewards: "gray,normal"}],
       ["cook"]
     )
