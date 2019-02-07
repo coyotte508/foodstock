@@ -4,6 +4,7 @@ import { Level, Resource, WaitingCustomerPosition } from './enums';
 import Context from './context';
 import { specialCustomerCards, basicCustomerCards } from './customer';
 import * as _ from "lodash";
+import Reward from './reward';
 
 export type HelperPlacement = [Level, number, number];
 
@@ -33,6 +34,10 @@ export function possibleHelperPlacements(G: GameState, pl: Player) {
 
 export function isPendingResource(G: GameState, resource: Resource) {
   return G.pendingResources.some(rew => rew.count > 0 && rew.type === resource);
+}
+
+export function usePendingResource(G: GameState, resource: Resource) {
+  G.pendingResources = Reward.merge(G.pendingResources, [new Reward(-1, resource)]);
 }
 
 export function addCustomer(G: GameState, ctx: Context, card: number, special: boolean) {

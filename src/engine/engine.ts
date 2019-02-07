@@ -4,7 +4,7 @@ import * as _ from 'lodash';
 import { SpecialCustomerDeck, createBasicCustomerDeck } from './customer';
 import Context from './context';
 import boards, { ActionBoard } from './action-boards';
-import { possibleHelperPlacements, HelperPlacement, addCustomer, isPendingResource } from './commands';
+import { possibleHelperPlacements, HelperPlacement, addCustomer, isPendingResource, usePendingResource } from './commands';
 import { Level, Ingredient, CookingPlate, CardPosition, Resource, CustomerType, ingredientTypes } from './enums';
 import Reward from './reward';
 import { DeckZone } from './deckzone';
@@ -153,7 +153,7 @@ const Foodstock = Game({
       }
 
       console.log("merging resources", JSON.stringify(G.pendingResources), [new Reward(-1, useGray ? Resource.GrayIngredient : color as Resource)]);
-      G.pendingResources = Reward.merge(G.pendingResources, [new Reward(-1, useGray ? Resource.GrayIngredient : color as Resource)]);
+      usePendingResource(G, useGray ? Resource.GrayIngredient : color as Resource);
 
       const pl = G.players[ctx.currentPlayer];
       const plate = pl.plates.find(pla => pla.id === payload.plate);
@@ -165,6 +165,16 @@ const Foodstock = Game({
     gainCustomer(G: GameState, ctx: Context, payload: {which: CardPosition, special: boolean}) {
       const {which, special} = payload;
 
+      let usedResource = special ? Resource.SpecialCustomer : Resource.NormalCustomer;
+
+      if (!isPendingResource(G, usedResource)) {
+        usedResource = Resource.AnyCustomer;
+      }
+
+      if (!isPendingResource(G, usedResource)) {
+        return INVALID_MOVE;
+      }
+
       const deck = special ? G.customers.special : G.customers.basic;
 
       let card: number = null;
@@ -172,7 +182,7 @@ const Foodstock = Game({
       if (payload.which === CardPosition.TopDeck) {
         [card] = DeckZone.draw(deck, 1);
       } else {
-        card = DeckZone.pick(deck, payload.which);
+        card = DeckZone.pick(deck, which);
 
         if (deck.available.length === 0) {
           DeckZone.show(deck);
@@ -180,6 +190,9 @@ const Foodstock = Game({
       }
 
       addCustomer(G, ctx, card, special);
+
+      usePendingResource(G, usedResource);
+
       return G;
     },
   },
@@ -225,28 +238,6 @@ const Foodstock = Game({
           }
         },
         next: 'main'
-      },
-      gainBasicCustomer: {
-        allowedMoves: ["gainBasicCustomer"],
-        onPhaseBegin(G, ctx) {
-          console.log("begin get basic Customer card phase");
-          return G;
-        },
-        onPhaseEnd(G, ctx) {
-          console.log("end get basic Customer card phase");
-          return G;
-        },
-      },
-      gainSpecialCustomer: {
-        allowedMoves: ["gainSpecialCustomer"],
-        onPhaseBegin(G, ctx) {
-          console.log("begin get basic Customer card phase");
-          return G;
-        },
-        onPhaseEnd(G, ctx) {
-          console.log("end get basic Customer card phase");
-          return G;
-        },
       },
     },
 

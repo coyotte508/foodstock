@@ -31,6 +31,8 @@ export namespace DeckZone {
   export function pick<T>(zone: DeckZone<T>, position: number) {
     const [card] = zone.available.splice(position, 1);
 
+    assert (card !== undefined);
+
     return card;
   }
 }
