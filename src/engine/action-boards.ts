@@ -22,7 +22,7 @@ const boards: ActionBoard[] = [
   { id: "1-1",
     actions: arr(
       ["beige", "2brown", "2beige"],
-      ["2brown", "2beige", "2brown"],
+      ["2brown", "2beige", "brown,beige"],
       ["special,normal", "special", "2special"],
       {cost: "2dollar", rewards: "improv", keep: true},
       {cost: "3dollar", unlimited: true, rewards: "gray"}

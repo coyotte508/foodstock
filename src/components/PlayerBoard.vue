@@ -4,7 +4,7 @@
     <svg viewBox="0 0 113 80" class="player-board">
       <use href="#player-board" :x=0 :y=0 />
       <Helper :x="3.4+4.56*h" :y="77" v-for="h in helpers" :key="'helper-' + h" :id=id />
-      <Plate v-for="i in [0, 1, 2]" :key="`p${id}-plate${i}`" :player=id :number=i :x="plateX(i)" :y=47.5 />
+      <Plate v-for="i in [0, 1, 2]" :key="`p${id}-plate${i}`" :player=id :number=i :x="plateX(i)" :y=47.7 />
     </svg>
   </v-card>
 </template>
@@ -31,7 +31,7 @@ export default class PlayerBoard extends Vue {
   }
 
   plateX(index: number) {
-    return [8.7, 24, 44.5][index];
+    return [8.7, 24, 44.7][index];
   }
 
   get helpers(): number[] {

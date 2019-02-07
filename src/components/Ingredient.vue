@@ -1,6 +1,6 @@
 <template>
   <gt :x=x :y=y :scale=scale :class="['ingredient', {draggable}]">
-    <circle :r=1 :cx=0 :cy=0 :fill=color stroke="#444" stroke-width=0.05 @click="dragStart" />
+    <circle :r=1 :cx=0 :cy=0 :fill=color stroke="#444" stroke-width=0.08 @click="dragStart" />
     <text class="t" style="font-size: 0.8px" v-if="count">{{count}}</text>
   </gt>
 </template>
