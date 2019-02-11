@@ -195,6 +195,26 @@ const Foodstock = Game({
 
       return G;
     },
+    serveCustomer(G: GameState, ctx: Context, payload: {customerPos: number}) {
+      const {customerPos} = payload;
+      // check that there is a plate to serve the customer
+      const pl = G.players[ctx.currentPlayer];
+      const customer = pl.customers.waiting[customerPos];
+      const plate = pl.plates.find(pla => pla.ingredients === customer.ingredients[0]);
+
+      if (!plate) {
+        return INVALID_MOVE;
+      }
+
+      plate.ingredients = [];
+      pl.money += customer.money ;
+      pl.money += customerPos === 0 && customer.blogger ? 2 : 0;
+      pl.money += customerPos === 0  ? 2 : 0;
+      pl.money -= customerPos === 3 && customer.blogger ? 2 : 0;
+
+      pl.customers.served.push( pl.customers.waiting[customerPos] );
+      pl.customers.waiting[customerPos] = null;
+    },
   },
 
   flow: {
@@ -202,7 +222,7 @@ const Foodstock = Game({
 
     phases: {
       main: {
-        allowedMoves: ["levelUp", "placeHelper"],
+        allowedMoves: ["levelUp", "placeHelper", "serveCustomer"],
         onPhaseBegin(G, ctx) {
           console.log("begin main phase");
           return G;
