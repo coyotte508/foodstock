@@ -214,9 +214,25 @@ const Foodstock = Game({
 
       pl.customers.served.push( pl.customers.waiting[customerPos] );
       pl.customers.waiting[customerPos] = null;
+      return G;
+    },
+
+    cookHelper(G: GameState, ctx: Context, payload: {fromPlate: CookingPlate, fromPos: number, toPlate: CookingPlate, toPos: number}) {
+      const {fromPlate, fromPos, toPlate, toPos} = payload;
+      const pl = G.players[ctx.currentPlayer];
+
+      if (!isPendingResource(G, Resource.Cook)) {
+        return INVALID_MOVE;
+      }
+
+      const ingredient = pl.plates[fromPlate].ingredients[fromPos];
+      pl.plates[fromPlate].ingredients.splice(fromPos, 1);
+      pl.plates[toPlate].ingredients.splice(toPos, 1, ingredient);
+
+      usePendingResource(G, Resource.Cook);
+      return G;
     },
   },
-
   flow: {
     startingPhase: "main",
 
@@ -233,7 +249,7 @@ const Foodstock = Game({
         }
       },
       gainResources: {
-        allowedMoves: ["gainIngredient", "gainCustomer"],
+        allowedMoves: ["gainIngredient", "gainCustomer", "cookHelper"],
         onPhaseBegin(G, ctx) {
           console.log("begin resource phase");
           return G;
