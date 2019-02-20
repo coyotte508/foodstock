@@ -20,6 +20,10 @@ export default class FoodstockClient {
     return this.client.moves;
   }
 
+  get phases() {
+    return this.client.phases;
+  }
+
   player(id: string | number): Player {
     return this.G.players[id];
   }

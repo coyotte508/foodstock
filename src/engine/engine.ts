@@ -31,7 +31,6 @@ export interface GameState {
   nPlayers: number;
   round: number;
   lastRound: number;
-
   customers: {
     basic: DeckZone<number>;
     special: DeckZone<number>;
@@ -46,7 +45,6 @@ const Foodstock = Game({
       nPlayers: ctx.numPlayers,
       // Secret key only known to server
       secret: null,
-
       customers: {
         basic: {deck: createBasicCustomerDeck(), discard: [], available: [], visible: 1},
         special: {deck: [...SpecialCustomerDeck], discard: [], available: [], visible: ctx.numPlayers + 1},
@@ -104,12 +102,12 @@ const Foodstock = Game({
       pl.level += 1;
       const rewards = G.actionBoards[pl.level].rewards;
       if (rewards) {
-        if (rewards[0].type === Resource.NormalCustomer ) {
-          ctx.events.endPhase({next: "gainNormalCustomer"});
-        }
+          G.pendingResources.push(...rewards);
+          ctx.events.endPhase({next: "gainResources"});
+      } else {
+        ctx.events.endTurn();
       }
 
-      ctx.events.endTurn();
       return G;
     },
 
@@ -163,6 +161,7 @@ const Foodstock = Game({
     },
 
     gainCustomer(G: GameState, ctx: Context, payload: {which: CardPosition, special: boolean}) {
+      console.log("gain customer", payload);
       const {which, special} = payload;
 
       let usedResource = special ? Resource.SpecialCustomer : Resource.NormalCustomer;
@@ -251,11 +250,11 @@ const Foodstock = Game({
       gainResources: {
         allowedMoves: ["gainIngredient", "gainCustomer", "cookHelper"],
         onPhaseBegin(G, ctx) {
-          console.log("begin resource phase");
+          console.log("begin gainResources phase");
           return G;
         },
         onPhaseEnd(G: GameState, ctx) {
-          console.log("end resource phase");
+          console.log("end gainResources phase");
 
           // Replace special customer cards if some were taken
           if (G.customers.special.available.length < G.customers.special.visible) {
