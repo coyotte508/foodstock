@@ -49,24 +49,24 @@ export function addCustomer(G: GameState, ctx: Context, card: number, special: b
 
   // Shift existing customers
   const shift = (pos: WaitingCustomerPosition) => {
-    if (pl.customers[pos] === null) {
+    if (pl.customers.waiting[pos] === null) {
       return;
     }
 
-    const shiftedCustomer = pl.customers[pos];
-    pl.customers[pos] = null;
+    const shiftedCustomer = pl.customers.waiting[pos];
+    pl.customers.waiting[pos] = null;
 
     if (pos === WaitingCustomerPosition.Last) {
       pl.money -= 2;
       deck.discard.push(+shiftedCustomer.id);
     } else {
       shift(pos + 1);
-      pl.customers[pos + 1] = shiftedCustomer;
+      pl.customers.waiting[pos + 1] = shiftedCustomer;
     }
   };
 
   shift(WaitingCustomerPosition.First);
-  pl.customers[0] = customer;
+  pl.customers.waiting[0] = customer;
 
   return G;
 }
