@@ -1,4 +1,4 @@
-import * as assert from "assert";
+import assert from "assert";
 
 export interface DeckZone<T = any> {
   discard: T[];
