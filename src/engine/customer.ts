@@ -30,7 +30,7 @@ export function createBasicCustomerDeck() {
   const deckComposition = [7, 5, 7];
   const deck = [];
   for (let i = 0; i < deckComposition.length; i++) {
-    deck.push(... new Array(deckComposition[i]).map(() => i));
+    deck.push(... [... new Array(deckComposition[i])].map(() => i));
   }
   // deckComposition.forEach( c => deck.splice( deck.length , 0, ...Array.from(Array(deckComposition[c]), x => c)));
   return deck;
