@@ -12,4 +12,7 @@ export default interface Context {
   /** Player that just moved */
   playerID: string;
   turn: number;
+  actionPlayers: string[];
+  playOrder: string[];
+  playOrderPos: number;
 }

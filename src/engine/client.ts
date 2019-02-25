@@ -16,6 +16,10 @@ export default class FoodstockClient {
     return this.client.getState().G;
   }
 
+  get ctx() {
+    return this.client.getState().ctx;
+  }
+
   get moves() {
     return this.client.moves;
   }

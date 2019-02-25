@@ -1,4 +1,4 @@
-import {Game, INVALID_MOVE} from 'boardgame.io/core';
+import {Game, TurnOrder, INVALID_MOVE} from 'boardgame.io/core';
 import { Player, createPlayer } from './player';
 import * as _ from 'lodash';
 import { SpecialCustomerDeck, createBasicCustomerDeck } from './customer';
@@ -10,6 +10,7 @@ import Reward from './reward';
 import { DeckZone } from './deckzone';
 
 interface SetupData {
+  seed: 1;
 
 }
 
@@ -29,6 +30,9 @@ export interface GameState {
   actionBoards: ActionBoard [];
 
   nPlayers: number;
+  startingRoundOrder: string[];
+  roundOrder: string[];
+  passOrder: string[];
   round: number;
   lastRound: number;
   customers: {
@@ -39,6 +43,7 @@ export interface GameState {
 
 const Foodstock = Game({
   name: 'Foodstock',
+  seed : 1,
   setup: (ctx: Context, setupData: SetupData) => {
     const G: GameState = {
       players: {},
@@ -49,7 +54,9 @@ const Foodstock = Game({
         basic: {deck: createBasicCustomerDeck(), discard: [], available: [], visible: 1},
         special: {deck: [...SpecialCustomerDeck], discard: [], available: [], visible: ctx.numPlayers + 1},
       },
-
+      startingRoundOrder: [],
+      roundOrder: [],
+      passOrder: [],
       round: 1,
       lastRound: ctx.numPlayers <= 3 ? 3 : 4,
 
@@ -79,8 +86,10 @@ const Foodstock = Game({
 
     for (let i = 0; i < ctx.numPlayers; i++) {
       G.players[i] = createPlayer(ctx, '' + i);
+      G.startingRoundOrder.push('' + i);
     }
 
+    G.roundOrder = G.startingRoundOrder;
     G.customers.basic.deck = ctx.random.Shuffle(G.customers.basic.deck);
     G.customers.special.deck = ctx.random.Shuffle(G.customers.special.deck);
 
@@ -104,8 +113,6 @@ const Foodstock = Game({
       if (rewards) {
           G.pendingResources.push(...rewards);
           ctx.events.endPhase({next: "gainResources"});
-      } else {
-        ctx.events.endTurn();
       }
 
       return G;
@@ -127,6 +134,12 @@ const Foodstock = Game({
       action.helpers.push(pl.id);
       G.pendingResources.push(...action.rewards);
       ctx.events.endPhase({next: "gainResources"});
+      return G;
+    },
+
+    // PLayer can serve customers but wants to pass
+    pass(G: GameState, ctx: Context) {
+      ctx.events.endTurn();
       return G;
     },
 
@@ -192,6 +205,8 @@ const Foodstock = Game({
 
       usePendingResource(G, usedResource);
 
+      ctx.events.endTurn();
+
       return G;
     },
     serveCustomer(G: GameState, ctx: Context, payload: {customerPos: number}) {
@@ -236,39 +251,62 @@ const Foodstock = Game({
     startingPhase: "main",
 
     phases: {
+      turnOrder: TurnOrder.CUSTOM_FROM('roundOrder'),
       main: {
-        allowedMoves: ["levelUp", "placeHelper", "serveCustomer"],
-        onPhaseBegin(G, ctx) {
-          console.log("begin main phase");
+        allowedMoves: ["levelUp", "placeHelper", "serveCustomer", "pass"],
+        onPhaseBegin(G: GameState, ctx: Context) {
+          console.log("begin main phase: player:", ctx.currentPlayer);
           return G;
         },
-        onPhaseEnd(G, ctx) {
+        onPhaseEnd(G: GameState, ctx: Context) {
           console.log("end main phase");
+          // const shouldEndRound = false;
+          // if (shouldEndRound) {
+          //   G.round += 1;
+
+          //   if (G.round > G.lastRound) {
+          //     return G;
+          //   }
+
+          //   // At the end of a round, reset board level
+          //   _.forEach(G.players, Player.beginRound);
+          // }
+          // removes the player from the playOrder if he finished the helpers
+          if ( G.players[ctx.currentPlayer].helpers <= 0 ) {
+            G.roundOrder.splice(ctx.playOrderPos, 1);
+          }
           return G;
-        }
+        },
+        onTurnBegin: (G: GameState, ctx: Context) => {
+          console.log("onTurnBegin MainPhase", ctx.currentPlayer, ctx.playOrder);
+          return G;
+        },
+        onTurnEnd: (G: GameState, ctx: Context) => {
+          console.log("onTurnEnd MainPhase", ctx.currentPlayer, ctx.playOrder);
+          return G;
+        },
       },
       gainResources: {
         allowedMoves: ["gainIngredient", "gainCustomer", "cookHelper"],
-        onPhaseBegin(G, ctx) {
-          console.log("begin gainResources phase");
+        onPhaseBegin(G: GameState, ctx: Context) {
+          console.log("begin gainResources phase", ctx.currentPlayer );
           return G;
         },
-        onPhaseEnd(G: GameState, ctx) {
-          console.log("end gainResources phase");
+        onPhaseEnd(G: GameState, ctx: Context) {
+          console.log("end gainResources phase", ctx.currentPlayer );
 
           // Replace special customer cards if some were taken
           if (G.customers.special.available.length < G.customers.special.visible) {
             DeckZone.clear(G.customers.special);
             DeckZone.show(G.customers.special);
           }
-
           return G;
         },
         endPhaseIf(G: GameState, ctx: Context) {
-          console.log("gainResources.endPhaseIf");
+
           console.log(G.pendingResources);
           if (G.pendingResources.length === 0) {
-            ctx.events.endTurn();
+            console.log("gainResources.endPhaseIf");
             return true;
           }
         },
@@ -286,31 +324,14 @@ const Foodstock = Game({
         };
       }
     },
-
-    onTurnEnd: (G: GameState, ctx: Context) => {
-      console.log("onTurnEnd", ctx.currentPlayer);
-      const shouldEndRound = false;
-      if (shouldEndRound) {
-        G.round += 1;
-
-        if (G.round > G.lastRound) {
-          return G;
-        }
-
-        // At the end of a round, reset board level
-        _.forEach(G.players, Player.beginRound);
-      }
-
-      return G;
-    },
   },
 
   // State viewable by specific player (hide cards)
   playerView: (G: GameState, ctx, playerId) => {
     const secret = _.cloneDeep(G);
 
-    secret.customers.basic.deck = secret.customers.basic.deck.map(x => 0);
-    secret.customers.special.deck = secret.customers.special.deck.map(x => 0);
+    // secret.customers.basic.deck = secret.customers.basic.deck.map(x => 0);
+    // secret.customers.special.deck = secret.customers.special.deck.map(x => 0);
 
     return secret;
   },

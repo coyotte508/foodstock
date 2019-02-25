@@ -18,7 +18,7 @@ describe("engine", () => {
   });
 
 
-  it("should add a basic Customer from TopDeck when level up a player", () => {
+  it("should add a basic Customer from TopDeck when level up a player,pass to next player, level up, get first available card", () => {
     const client = new FoodstockClient();
 
 
@@ -29,6 +29,17 @@ describe("engine", () => {
     client.moves.gainCustomer(  {which: CardPosition.TopDeck, special: false});
     expect(client.player(0).customers.waiting[0].id).to.equal("0");
     expect(client.G.customers.basic.deck.length).to.equal(numCards - 1);
+    expect(client.player(0).level).to.equal(Level.Level2);
+    expect(client.ctx.currentPlayer).to.equal('1');
+    expect(client.player(1).level).to.equal(Level.Level1);
+    expect(client.ctx.currentPlayer).to.equal('1');
+    client.moves.levelUp();
+    client.moves.gainCustomer(  {which: CardPosition.First, special: false});
+    expect(client.player(1).customers.waiting[0].id).to.equal("1");
+    expect(client.G.customers.basic.deck.length).to.equal(numCards - 2);
+    expect(client.ctx.currentPlayer).to.equal('0');
+
+
 
   });
 
