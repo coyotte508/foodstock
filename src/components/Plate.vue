@@ -1,5 +1,5 @@
 <template>
-  <gt :x=x :y=y :scale=scale v-draggable >
+  <gt :x=x :y=y :scale=scale>
     <DropZone :id="`plate-${player}-${number}`" :radius=5.8 @click="drop(number)" /> 
     <Ingredient :color="ingredient" :scale="2" v-for="(ingredient, i) in ingredients" :y="((ingredients.length-1)/2 - i) * 1.5" :draggable=false :key=i />
   </gt>

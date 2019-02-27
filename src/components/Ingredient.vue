@@ -1,6 +1,6 @@
 <template>
-  <gt :x=x :y=y :scale=scale :class="['ingredient', {draggable}]">
-    <circle :r=1 :cx=0 :cy=0 :fill=color stroke="#444" stroke-width=0.08 @click="dragStart" />
+  <gt :x=x :y=y :scale=scale :class="['ingredient', {draggable}]" v-draggable="draggable">
+    <circle :r=1 :cx=0 :cy=0 :fill=color stroke="#444" stroke-width=0.08 />
     <text class="t" style="font-size: 0.8px" v-if="count">{{count}}</text>
   </gt>
 </template>
@@ -13,15 +13,18 @@ import draggable from './library/draggable';
 
 @Component({
   created() {
-    this.$on("start", () => this.notifyDragStart());
+    this.$on("dragStart", () => this.notifyDragStart());
   }
 })
-export default class Ingredient extends mixins(SvgG, draggable) {
+export default class Ingredient extends SvgG {
   @Prop()
   color: string;
 
   @Prop({default: 0})
   count: number;
+
+  @Prop({default: true})
+  draggable: boolean;
 
   notifyDragStart() {
     console.log("Dispatching chooseIngredient");
