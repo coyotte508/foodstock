@@ -1,12 +1,14 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import App from './App.vue';
+import './components/library/draggable-directive';
 import Vuetify from "vuetify";
 import "vuetify/dist/vuetify.min.css";
 import store from './store';
 import SvgG from './components/library/SvgG.vue';
 import DropZone from './components/library/DropZone.vue';
 import plugin from './plugin';
+
 
 Vue.component("gt", SvgG);
 Vue.component("DropZone", DropZone);
