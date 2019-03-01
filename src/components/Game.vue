@@ -11,11 +11,32 @@
       <v-flex xs4>
         <Commands @levelUp="levelUp" @placeHelper="placeHelper" />
         <IngredientPool class="mx-2" />
-        <!-- <svg viewBox="0 0 80 120">
-          <Card>
-            <use href="#customer-basic-0" />
-          </Card>
-        </svg> -->
+        <svg viewBox="0 0 80 120" class="mt-2">
+          <g>
+            <Card>
+              <rect width=20 height=27.5 fill=grey />
+              <text :y=13.7 class="t" font-size=5 x=10>Basic</text>
+            </Card>
+            <Card :scale=0.26 :y=30>
+              <use href="#customer-basic-0" />
+            </Card>
+          </g>
+          <gt :x=22>
+            <Card>
+              <rect width=20 height=27.5 fill=grey />
+              <text :y=13.7 class="t" font-size=5 x=10>Special</text>
+            </Card>
+            <Card :scale=0.26 :y=30 :active=true>
+              <use href="#customer-special-0" />
+            </Card>
+            <Card :scale=0.26 :y=40 :active=true>
+              <use href="#customer-special-1" />
+            </Card>
+            <Card :scale=0.26 :y=50 :active=true>
+              <use href="#customer-special-2" />
+            </Card>
+          </gt>
+        </svg>
       </v-flex>
     </v-layout>
   </div>
