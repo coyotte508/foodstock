@@ -11,6 +11,11 @@
       <v-flex xs4>
         <Commands @levelUp="levelUp" @placeHelper="placeHelper" />
         <IngredientPool class="mx-2" />
+        <!-- <svg viewBox="0 0 80 120">
+          <Card>
+            <use href="#customer-basic-0" />
+          </Card>
+        </svg> -->
       </v-flex>
     </v-layout>
   </div>
@@ -27,6 +32,7 @@ import { possibleHelperPlacements } from '@/engine/commands';
 import Context from '@/engine/context';
 import Commands from '@/components/Commands.vue';
 import IngredientPool from '@/components/IngredientPool.vue';
+import Card from '@/components/library/Card.vue';
 
 // let client = null;
 
@@ -35,7 +41,8 @@ import IngredientPool from '@/components/IngredientPool.vue';
     Board,
     PlayerBoard,
     Commands,
-    IngredientPool
+    IngredientPool,
+    Card
   },
   watch: {
   },

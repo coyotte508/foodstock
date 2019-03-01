@@ -9,7 +9,6 @@
 import {mixins} from 'vue-class-component';
 import {Vue, Component, Prop} from "vue-property-decorator";
 import SvgG from '@/components/library/SvgG.vue';
-import draggable from './library/draggable';
 
 @Component({
   created() {
